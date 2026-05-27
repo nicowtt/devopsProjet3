@@ -1,0 +1,107 @@
+# Node
+**/node_modules/*
+**/dist/*
+npm-debug.log
+
+# TypeScript
+src/*.js
+src/*.map
+src/*.d.ts
+
+# Angular
+**/.angular/*
+coverage
+.nyc_output
+
+# nx
+**/.nx/*
+
+# JetBrains
+.project
+.settings
+
+*.iml
+
+# VS Code
+**/.vscode/*
+!**/.vscode/settings.json
+!**/.vscode/tasks.json
+!**/.vscode/launch.json
+!**/.vscode/extensions.json
+
+# IntelliJ run configurations
+**/.run/
+
+# Claude Code & AI Assistants
+AGENTS.md
+
+# Configuration IA personnelle
+.claude/
+CLAUDE.md
+
+# PRD - Fichiers générés (personnel)
+# Garder structure partagée : templates, README, scripts, index.json
+/PRD/tasks/epics/*.mdc
+!/PRD/tasks/epics/TEMPLATE-*.mdc
+/PRD/tasks/features/*.mdc
+!/PRD/tasks/features/TEMPLATE-*.mdc
+/PRD/tasks/tasks/*.mdc
+!/PRD/tasks/tasks/TEMPLATE-*.mdc
+/PRD/prps/prp-task-*.mdc
+/PRD/*.md
+!/PRD/README.md
+!/PRD/bug-reports/README.md
+
+# Autres configs IA personnelles (optionnel)
+.chatgpt.md
+.gemini.md
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Mac
+.DS_Store
+**/.DS_Store
+
+# Ngc generated files
+**/*.ngfactory.ts
+
+# Build files
+.tmp/*
+build/
+out/*
+dist/*
+Back-pangee-solutions/pangee-solutions/src
+
+# gradle 
+**/.gradle/*
+
+#java
+*.hprof
+iOS/application-ios-purchase/lizbike.xcodeproj/project.xcworkspace/xcuserdata/yoann.xcuserdatad/UserInterfaceState.xcuserstate
+iOS/application-ios-purchase/lizbike.xcodeproj/xcuserdata/yoann.xcuserdatad/xcschemes/xcschememanagement.plist
+
+**/.idea/*
+
+**/__pycache__
+
+**/bin/*
+**/*/.classpath
+
+#pgadmin
+Ops/Docker/Local/pgadmin/*
+
+# Spring Boot - fichiers locaux sensibles
+**/application-local.yml
+**/application-local.properties
+**/.env
+
+# Maven
+**/target/
+**/*.jar
+**/*.war
+**/*.class
+.mvn/
+mvnw
+mvnw.cmd

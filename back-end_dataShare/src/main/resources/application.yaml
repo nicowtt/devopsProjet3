@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: dataShare
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    enabled: true
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+
+logging:
+  level:
+    org:
+      hibernate:
+        type: info
+      springframework:
+        web:
+          filter:
+            CommonsRequestLoggingFilter: info
+    com:
+      openclassrooms:
+        dataShare: info
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
