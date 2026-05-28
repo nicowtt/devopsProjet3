@@ -1,1 +1,72 @@
-<p>register works!</p>
+<div class="page-wrapper">
+  <nav class="navbar">
+    <span class="brand">DataShare</span>
+    <button class="btn-login" routerLink="/login">Se connecter</button>
+  </nav>
+
+  <main class="main-content">
+    <div class="card">
+      <h1 class="card-title">Créer un compte</h1>
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            placeholder="Saisissez votre email..."
+            [class.input-error]="email?.invalid && email?.touched"
+          />
+          @if (email?.touched && email?.hasError('required')) {
+            <span class="error-text">L'email est requis</span>
+          } @else if (email?.touched && email?.hasError('email')) {
+            <span class="error-text">Format d'email invalide</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="password">Mot de passe</label>
+          <input
+            id="password"
+            type="password"
+            formControlName="password"
+            placeholder="Saisissez votre mot de passe..."
+            [class.input-error]="password?.invalid && password?.touched"
+          />
+          @if (password?.touched && password?.hasError('required')) {
+            <span class="error-text">Le mot de passe est requis</span>
+          } @else if (password?.touched && password?.hasError('minlength')) {
+            <span class="error-text">Le mot de passe doit contenir au moins 8 caractères</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Verification du mot de passe</label>
+          <input
+            id="confirmPassword"
+            type="password"
+            formControlName="confirmPassword"
+            placeholder="Saisissez le à nouveau"
+            [class.input-error]="confirmPassword?.touched && registerForm.hasError('passwordMismatch')"
+          />
+          @if (confirmPassword?.touched && registerForm.hasError('passwordMismatch')) {
+            <span class="error-text">Les mots de passe ne correspondent pas</span>
+          }
+        </div>
+
+        @if (errorMessage) {
+          <p class="error-text server-error">{{ errorMessage }}</p>
+        }
+
+        <a class="link-login" routerLink="/login">J'ai déjà un compte</a>
+
+        <button type="submit" data-cy="register-btn" class="btn-submit">Créer mon compte</button>
+      </form>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <span>Copyright DataShare&reg; 2025</span>
+  </footer>
+</div>

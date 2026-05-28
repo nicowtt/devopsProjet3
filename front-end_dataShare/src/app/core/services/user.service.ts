@@ -9,7 +9,7 @@ import { RegisterDTO } from '../models/register.model';
 export class UserService {
   constructor(private httpClient: HttpClient) { }
 
-  register(user: RegisterDTO): Observable<Object> {
-    return this.httpClient.post('/api/register', user);
+  register(registerDTO: RegisterDTO): Observable<Object> {
+    return this.httpClient.post('/api/register', registerDTO);
   }
 }

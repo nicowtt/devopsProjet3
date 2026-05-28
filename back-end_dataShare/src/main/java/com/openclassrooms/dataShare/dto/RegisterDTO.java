@@ -1,12 +1,18 @@
 package com.openclassrooms.dataShare.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
+
+@Data
 public class RegisterDTO {
 
-    // ----- Constructors ----- //
+    @NotBlank
+    @Email
+    private String email;
 
-    // ----- Public methods ----- //
-
-    // ----- Private methods ----- //
-
-    // ----- Overridden methods ----- //
+    @NotBlank
+    @Size(min = 8)
+    private String password;
 }
