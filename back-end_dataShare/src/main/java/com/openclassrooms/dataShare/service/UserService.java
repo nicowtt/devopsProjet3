@@ -41,7 +41,7 @@ public class UserService {
         if (userDb.isPresent() && passwordEncoder.matches(user.getPassword(), userDb.get().getPassword())) {
             return jwtService.generateToken(userDb.get());
         } else {
-            throw new BadCredentialsException("Invalid credentials");
+            throw new BadCredentialsException("Email ou mot de passe invalide");
         }
     }
 }
