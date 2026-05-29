@@ -1,9 +1,9 @@
 services:
   postgres:
-    image: 'postgres:latest'
+    image: 'postgres:18'
     environment:
-      - 'POSTGRES_DB=dataShare_db'
-      - 'POSTGRES_PASSWORD=dataShare_password'
-      - 'POSTGRES_USER=dataShare_user'
+      - 'POSTGRES_DB=${DB_NAME}'
+      - 'POSTGRES_PASSWORD=${DB_PASSWORD}'
+      - 'POSTGRES_USER=${DB_USER}'
     ports:
       - '5432:5432'

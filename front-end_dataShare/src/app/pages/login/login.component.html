@@ -1,1 +1,56 @@
-<p>login works!</p>
+<div class="background">
+  <nav class="navbar">
+    <a class="brand" routerLink="/home">DataShare</a>
+    <button class="btn-login" routerLink="/login">Se connecter</button>
+  </nav>
+
+  <div class="content">
+    <div class="card">
+      <h1 class="card-title">Connexion</h1>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            placeholder="Saisissez votre email..."
+            [class.input-error]="email?.invalid && email?.touched"
+          />
+          @if (email?.touched && email?.hasError('required')) {
+            <span class="error-text">L'email est requis</span>
+          } @else if (email?.touched && email?.hasError('email')) {
+            <span class="error-text">Format d'email invalide</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="password">Mot de passe</label>
+          <input
+            id="password"
+            type="password"
+            formControlName="password"
+            placeholder="Saisissez votre mot de passe..."
+            [class.input-error]="password?.invalid && password?.touched"
+          />
+          @if (password?.touched && password?.hasError('required')) {
+            <span class="error-text">Le mot de passe est requis</span>
+          }
+        </div>
+
+        @if (errorMessage) {
+          <p class="error-text server-error">{{ errorMessage }}</p>
+        }
+
+        <a class="link-register" routerLink="/register">Créer un compte</a>
+
+        <button type="submit" data-cy="login-btn" class="btn-submit">Connexion</button>
+      </form>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <span>Copyright DataShare&reg; 2025</span>
+  </footer>
+</div>

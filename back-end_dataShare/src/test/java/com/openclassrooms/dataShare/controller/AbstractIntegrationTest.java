@@ -23,5 +23,7 @@ public class AbstractIntegrationTest {
         registry.add("spring.datasource.password", postgreSQLContainer::getPassword);
         registry.add("spring.jpa.hibernate.ddl-auto", () -> "create");
         registry.add("spring.liquibase.enabled", () -> "false");
+        registry.add("jwt.secret", () -> "YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXoxMjM0NTY=");
+        registry.add("jwt.expiration", () -> "86400000");
     }
 }

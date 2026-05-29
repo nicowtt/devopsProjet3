@@ -1,0 +1,21 @@
+<div class="background">
+  <nav class="navbar">
+    <a class="brand" routerLink="/home">DataShare</a>
+    @if (isLoggedIn) {
+      <button class="btn-mySpace" routerLink="/mySpace">Mon espace</button>
+    } @else {
+      <button class="btn-login" routerLink="/login">Se connecter</button>
+    }
+  </nav>
+
+  <div class="content">
+    <p class="upload-label">Tu veux partager un fichier ?</p>
+    <button class="upload-btn" type="button">
+      <i class="fa-solid fa-cloud-arrow-up"></i>
+    </button>
+  </div>
+
+  <footer class="footer">
+    <span>Copyright DataShare&reg; 2025</span>
+  </footer>
+</div>

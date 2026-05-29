@@ -1,6 +1,7 @@
 package com.openclassrooms.dataShare.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.openclassrooms.dataShare.dto.LoginDTO;
 import com.openclassrooms.dataShare.dto.RegisterDTO;
 import com.openclassrooms.dataShare.entities.User;
 import com.openclassrooms.dataShare.repository.UserRepository;
@@ -93,4 +94,19 @@ class UserControllerTest extends AbstractIntegrationTest {
             .andDo(print())
             .andExpect(MockMvcResultMatchers.status().isCreated());
     }
+
+    @Test
+    void loginWithoutRequiredData() throws Exception {
+        LoginDTO loginDTO = new LoginDTO();
+
+        mockMvc.perform(MockMvcRequestBuilders.post(URL)
+                .content(objectMapper.writeValueAsString(loginDTO))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    // login test successful is on AbstractIntegrationTest.
+    // It will be using before each authenticated integrated test.
 }

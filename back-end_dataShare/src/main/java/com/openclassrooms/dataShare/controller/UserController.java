@@ -1,5 +1,6 @@
 package com.openclassrooms.dataShare.controller;
 
+import com.openclassrooms.dataShare.dto.LoginDTO;
 import com.openclassrooms.dataShare.dto.RegisterDTO;
 import com.openclassrooms.dataShare.mapper.UserDTOMapper;
 import com.openclassrooms.dataShare.service.UserService;
@@ -24,5 +25,11 @@ public class UserController {
     public ResponseEntity<?> register(@Valid @RequestBody RegisterDTO registerDTO) {
         userService.register(userDTOMapper.toEntity(registerDTO));
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PostMapping("/api/login")
+    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
+        String jwtToken = userService.login(userDTOMapper.toEntity(loginDTO));
+        return ResponseEntity.ok(jwtToken);
     }
 }

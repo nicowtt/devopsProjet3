@@ -9,6 +9,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
@@ -27,6 +28,8 @@ class UserServiceTest {
     private UserRepository userRepository;
     @Mock
     private PasswordEncoder passwordEncoder;
+    @Mock
+    private JwtService jwtService;
     @InjectMocks
     private UserService userService;
 
@@ -68,5 +71,36 @@ class UserServiceTest {
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
         verify(userRepository).save(userCaptor.capture());
         assertThat(userCaptor.getValue()).isEqualTo(user);
+    }
+
+    @Test
+    public void test_login_user() {
+        // GIVEN
+        User user = new User();
+        user.setEmail(EMAIL);
+        user.setPassword(PASSWORD);
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches(any(), any())).thenReturn(true);
+        when(jwtService.generateToken(user)).thenReturn("OK");
+
+        // WHEN
+        String result = userService.login(user);
+
+        // THEN
+        assertThat(result).isEqualTo("OK");
+    }
+
+    @Test
+    public void test_login_with_bad_password_throws_BadCredentialsException() {
+        // GIVEN
+        User user = new User();
+        user.setEmail(EMAIL);
+        user.setPassword(PASSWORD);
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches(any(), any())).thenReturn(false);
+
+        // THEN
+        Assertions.assertThrows(BadCredentialsException.class,
+            () -> userService.login(user));
     }
 }

@@ -3,7 +3,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 
 import { UserService } from './user.service';
-import { RegisterDTO } from '../models/register.model';
+import { LoginDTO, RegisterDTO } from '../models/user.model';
 
 describe('UserService', () => {
   let service: UserService;
@@ -46,6 +46,37 @@ describe('UserService', () => {
       expect(req.request.method).toBe('POST');
       expect(req.request.body).toEqual(newUser);
       req.flush(null, { status: 201, statusText: 'Created' });
+    });
+  });
+
+  describe('login()', () => {
+    it('must send POST request to /api/login with correct data', () => {
+      // GIVEN
+      const loginRequestDTO: LoginDTO = { email: 'unAutreTest@gmail.com', password: 'password' };
+      const fakeToken = 'jwtToken';
+
+      // WHEN
+      service.login(loginRequestDTO).subscribe();
+
+      // THEN
+      const req = httpMock.expectOne('/api/login');
+      expect(req.request.method).toBe('POST');
+      expect(req.request.body).toEqual(loginRequestDTO);
+      req.flush(fakeToken);
+    });
+
+    it('must return error on bad credentials', () => {
+      // GIVEN
+      const loginDTO: LoginDTO = { email: 'unAutreTest@gmail.com', password: 'badPassword' };
+
+      // WHEN
+      service.login(loginDTO).subscribe({
+        error: err => expect(err.status).toBe(401)
+      });
+
+      // THEN
+      const req = httpMock.expectOne('/api/login');
+      req.flush(null, { status: 401, statusText: 'Unauthorized' });
     });
   });
 });

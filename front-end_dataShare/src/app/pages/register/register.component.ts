@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../../core/services/user.service';
-import { RegisterDTO } from '../../core/models/register.model';
+import { RegisterDTO } from '../../core/models/user.model';
 
 function passwordMatchValidator(control: AbstractControl) {
   const password = control.get('password')?.value;
