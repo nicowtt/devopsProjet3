@@ -1,5 +1,6 @@
 package com.openclassrooms.dataShare.dto;
 
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -17,6 +18,7 @@ public class FileDTO {
 
     @NotNull
     @Min(1)
+    @Max(7)
     private Long dayBeforeExpiration;
 
     private LocalDateTime expiredAt;

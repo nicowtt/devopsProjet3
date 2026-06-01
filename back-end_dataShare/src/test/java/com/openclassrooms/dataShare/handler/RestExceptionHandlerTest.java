@@ -1,5 +1,6 @@
 package com.openclassrooms.dataShare.handler;
 
+import com.openclassrooms.dataShare.exception.FileStorageException;
 import com.openclassrooms.dataShare.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -79,6 +80,19 @@ class RestExceptionHandlerTest {
 
         // THEN
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+    }
+
+    @Test
+    void test_handleFileStorageException_returns_503() {
+        // GIVEN
+        FileStorageException exception = new FileStorageException("disk error", new RuntimeException());
+        when(webRequest.getDescription(false)).thenReturn("uri=/api/files");
+
+        // WHEN
+        ResponseEntity<Object> response = restExceptionHandler.handleFileStorageException(exception, webRequest);
+
+        // THEN
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.SERVICE_UNAVAILABLE);
     }
 
     @Test

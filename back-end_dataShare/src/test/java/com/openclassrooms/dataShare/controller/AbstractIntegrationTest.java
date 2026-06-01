@@ -25,5 +25,6 @@ public class AbstractIntegrationTest {
         registry.add("spring.liquibase.enabled", () -> "false");
         registry.add("jwt.secret", () -> "YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXoxMjM0NTY=");
         registry.add("jwt.expiration", () -> "86400000");
+        registry.add("file.upload-dir", () -> System.getProperty("java.io.tmpdir") + "/datashare-test-uploads");
     }
 }

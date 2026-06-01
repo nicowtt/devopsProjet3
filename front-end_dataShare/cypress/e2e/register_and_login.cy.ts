@@ -1,4 +1,4 @@
-describe('register / login and student CRUD', () => {
+describe('register and login', () => {
 
   const TOKEN = 'jwtToken';
 

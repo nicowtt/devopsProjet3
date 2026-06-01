@@ -1,0 +1,7 @@
+{
+  "all": true,
+  "include": ["src/**/*.ts"],
+  "exclude": ["**/*.spec.ts", "src/environments/**"],
+  "reporter": ["lcov", "text", "html"],
+  "report-dir": "coverage/cypress"
+}
