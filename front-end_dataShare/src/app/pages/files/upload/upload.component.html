@@ -1,0 +1,96 @@
+<div class="background">
+  <nav class="navbar">
+    <a class="brand" routerLink="/home">DataShare</a>
+    @if (isLoggedIn) {
+      <button class="btn-mySpace" routerLink="/mySpace">Mon espace</button>
+    } @else {
+      <button class="btn-login" routerLink="/login">Se connecter</button>
+    }
+  </nav>
+
+  <main class="main-content">
+    <div class="card">
+      <h1 class="card-title">Ajouter un fichier</h1>
+
+      <input #fileInput type="file" class="file-input-hidden" (change)="onFileSelected($event)" />
+
+      @if (!shareUrl) {
+        <div class="file-row">
+          <i class="fa-regular fa-file-image file-icon"></i>
+          <div class="file-info">
+            <span class="file-name">{{ truncatedName }}</span>
+            <span class="file-size">{{ fileSizeMo }}</span>
+          </div>
+          <button class="btn-change" type="button" (click)="changeFile()">Changer</button>
+        </div>
+
+        <form #uploadForm="ngForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="password">Mot de passe</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              [(ngModel)]="password"
+              placeholder="Optionnel"
+            />
+            @if (passwordError) {
+              <span class="field-error">{{ passwordError }}</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="expiration">Expiration (jours)</label>
+            <input
+              id="expiration"
+              name="expiration"
+              type="number"
+              [(ngModel)]="expiration"
+              min="1"
+              max="365"
+            />
+          </div>
+
+          @if (errorMessage) {
+            <p class="error-text">{{ errorMessage }}</p>
+          }
+
+          <div class="actions">
+            <button class="btn-upload" type="submit">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+              Téléverser
+            </button>
+          </div>
+        </form>
+
+      } @else {
+        <div class="file-row">
+          <i class="fa-regular fa-file-image file-icon"></i>
+          <div class="file-info">
+            <span class="file-name">{{ selectedFile?.name }}</span>
+            <span class="file-size">{{ fileSizeMo }}</span>
+          </div>
+        </div>
+
+        <p class="success-message">
+          Félicitations, ton fichier sera conservé chez nous pendant {{ expirationMessage }} !
+        </p>
+
+        <div class="link-box">
+          <a [href]="shareUrl" target="_blank">{{ shareUrl }}</a>
+        </div>
+
+        <div class="actions">
+          <button class="btn-upload" type="button" (click)="copyLink()">
+            <i class="fa-regular fa-copy"></i>
+            {{ linkCopied ? 'Lien copié !' : 'Copier le lien' }}
+          </button>
+        </div>
+      }
+    </div>
+  </main>
+
+  <footer class="footer">
+    <span>Copyright DataShare&reg; 2025</span>
+  </footer>
+</div>
