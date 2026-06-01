@@ -22,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "Fichiers", description = "Upload et gestion des fichiers")
 @RestController
-@RequestMapping("/api/files")
 @RequiredArgsConstructor
 public class FileController {
 
@@ -33,15 +32,15 @@ public class FileController {
         summary = "Upload d'un fichier",
         responses = {
             @ApiResponse(responseCode = "201", description = "Fichier uploadé avec succès"),
-            @ApiResponse(responseCode = "400", description = "Requête invalide"),
-            @ApiResponse(responseCode = "401", description = "Non authentifié")
+            @ApiResponse(responseCode = "503", description = "Le service est temporairement indisponible"),
         }
     )
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(path = "/api/files", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<FileDTO> upload(
             @RequestPart("file") MultipartFile file,
             @Valid @RequestPart("metadata") FileDTO fileDTO,
-            @AuthenticationPrincipal User user) {
+            @AuthenticationPrincipal User user
+    ) {
 
         FileDTO saved = fileService.upload(
             file,

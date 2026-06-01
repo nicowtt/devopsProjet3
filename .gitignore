@@ -92,6 +92,9 @@ iOS/application-ios-purchase/lizbike.xcodeproj/xcuserdata/yoann.xcuserdatad/xcsc
 #pgadmin
 Ops/Docker/Local/pgadmin/*
 
+# Fichiers uploadés
+back-end_dataShare/files/
+
 # Spring Boot - fichiers locaux sensibles
 **/application-local.yml
 **/application-local.properties

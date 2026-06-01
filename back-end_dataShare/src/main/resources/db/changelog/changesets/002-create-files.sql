@@ -10,7 +10,7 @@ CREATE TABLE files (
     "fil_created_at" TIMESTAMP  NOT NULL,
     "fil_expired_at" TIMESTAMP  NOT NULL,
     "fil_password"   TEXT       NULL,
-    "fil_usr_id_fk"  BIGINT     NOT NULL,
+    "fil_usr_id_fk"  BIGINT     NULL,
     PRIMARY KEY ("fil_id_pk"),
     CONSTRAINT fk_files_user FOREIGN KEY ("fil_usr_id_fk") REFERENCES users ("usr_id_pk") ON DELETE CASCADE);
 

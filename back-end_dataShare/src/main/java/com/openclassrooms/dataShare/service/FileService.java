@@ -46,7 +46,7 @@ public class FileService {
         file.setOwner(owner);
 
         File saved = fileRepository.save(file);
-        log.info("File saved: uuid={}, owner={}", saved.getUuid(), owner.getUsername());
+        log.info("File saved: uuid={}", saved.getUuid());
 
 
         this.saveToLocalStorage(multipartFile, file.getUuid());

@@ -46,6 +46,6 @@ public class File {
     private String password;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fil_usr_id_fk", nullable = false)
+    @JoinColumn(name = "fil_usr_id_fk", nullable = true)
     private User owner;
 }

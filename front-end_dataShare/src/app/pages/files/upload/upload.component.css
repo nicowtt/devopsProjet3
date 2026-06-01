@@ -66,6 +66,55 @@
   display: none;
 }
 
+.drop-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: 2px dashed #d1d5db;
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.drop-zone:hover,
+.drop-zone--active {
+  border-color: #c96245;
+  background-color: #fdf0e8;
+}
+
+.drop-icon {
+  font-size: 2.5rem;
+  color: #9ca3af;
+}
+
+.drop-zone--active .drop-icon {
+  color: #c96245;
+}
+
+.drop-label {
+  font-size: 0.95rem;
+  color: #6b7280;
+}
+
+.btn-add-file {
+  background: transparent;
+  color: #c96245;
+  border: 1px solid #c96245;
+  border-radius: 8px;
+  padding: 8px 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.btn-add-file:hover {
+  background-color: #fdf0e8;
+}
+
 /* File row */
 .file-row {
   display: flex;

@@ -1,8 +1,10 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { FileService, FileUploadResponse } from '../../../core/services/file.service';
+import { FileService } from '../../../core/services/file.service';
+import { FileDTO } from '../../../core/models/file.model';
 import { AuthService } from '../../../core/services/auth.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-upload',
@@ -16,6 +18,7 @@ export class UploadComponent {
   isLoggedIn = false;
 
   selectedFile: File | null = null;
+  isDragging = false;
   password = '';
   expiration = 7;
   shareUrl: string | null = null;
@@ -64,17 +67,47 @@ export class UploadComponent {
     this.fileInput.nativeElement.click();
   }
 
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragging = true;
+  }
+
+  onDragLeave(): void {
+    this.isDragging = false;
+  }
+
+  onDrop(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragging = false;
+    const file = event.dataTransfer?.files[0];
+    if (!file) return;
+    if (file.size > 1_000_000_000) {
+      this.errorMessage = 'Le fichier ne doit pas dépasser 1 Go.';
+      return;
+    }
+    this.errorMessage = '';
+    this.selectedFile = file;
+  }
+
   onSubmit(): void {
     if (!this.selectedFile) return;
+    if (this.expiration < 1 || this.expiration > 7) {
+      this.expiration = 7;
+    }
     if (this.password && this.password.length < 6) {
       this.passwordError = 'Le mot de passe doit contenir au moins 6 caractères.';
       return;
     }
     this.passwordError = '';
     this.errorMessage = '';
-    this.fileService.upload(this.selectedFile, this.expiration, this.password || undefined).subscribe({
-      next: (response: FileUploadResponse) => {
-        this.shareUrl = `https://localhost:9000/${response.uuid}`;
+    const fileDTO: FileDTO = {
+      name: this.selectedFile.name,
+      dayBeforeExpiration: this.expiration,
+      ...(this.password ? { password: this.password } : {})
+    };
+    this.fileService.upload(this.selectedFile, fileDTO).subscribe({
+      next: (response: FileDTO) => {
+        this.shareUrl = `${environment.apiBaseUrl}/${response.uuid}`;
       },
       error: (err) => {
         this.errorMessage = err.error?.message || 'Une erreur est survenue lors du téléversement.';

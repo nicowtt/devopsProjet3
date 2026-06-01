@@ -10,6 +10,11 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.yaml
     enabled: true
 
+  servlet:
+    multipart:
+      max-file-size: 1GB
+      max-request-size: 1GB
+
   jpa:
     show-sql: true
     hibernate:

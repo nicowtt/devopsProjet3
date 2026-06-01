@@ -1,13 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface FileUploadResponse {
-  uuid: string;
-  name: string;
-  size: number;
-  expiredAt: string;
-}
+import { FileDTO } from '../models/file.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,15 +9,10 @@ export interface FileUploadResponse {
 export class FileService {
   constructor(private httpClient: HttpClient) {}
 
-  upload(file: File, dayBeforeExpiration: number, password?: string): Observable<FileUploadResponse> {
+  upload(file: File, fileDTO: FileDTO): Observable<FileDTO> {
     const formData = new FormData();
     formData.append('file', file);
-
-    const metadata: Record<string, unknown> = { dayBeforeExpiration };
-    if (password) metadata['password'] = password;
-
-    formData.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
-
-    return this.httpClient.post<FileUploadResponse>('/api/files', formData);
+    formData.append('metadata', new Blob([JSON.stringify(fileDTO)], { type: 'application/json' }));
+    return this.httpClient.post<FileDTO>('/api/files', formData);
   }
 }
