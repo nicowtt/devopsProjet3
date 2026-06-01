@@ -1,5 +1,6 @@
 package com.openclassrooms.dataShare.handler;
 
+import com.openclassrooms.dataShare.exception.FileStorageException;
 import com.openclassrooms.dataShare.exception.ResourceNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -44,6 +45,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 new HttpHeaders(), HttpStatus.FORBIDDEN, request);
     }
 
+
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    @ExceptionHandler(value = {FileStorageException.class})
+    protected ResponseEntity<Object> handleFileStorageException(FileStorageException fileStorageException, WebRequest request) {
+        logError(fileStorageException);
+        return handleExceptionInternal(fileStorageException, getErrorDetails(fileStorageException, request),
+                new HttpHeaders(), HttpStatus.SERVICE_UNAVAILABLE, request);
+    }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(value = {Exception.class})

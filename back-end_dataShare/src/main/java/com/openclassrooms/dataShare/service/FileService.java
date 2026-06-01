@@ -3,6 +3,8 @@ package com.openclassrooms.dataShare.service;
 import com.openclassrooms.dataShare.dto.FileDTO;
 import com.openclassrooms.dataShare.entities.File;
 import com.openclassrooms.dataShare.entities.User;
+import com.openclassrooms.dataShare.exception.FileStorageException;
+import com.openclassrooms.dataShare.mapper.FileDTOMapper;
 import com.openclassrooms.dataShare.repository.FileRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -25,49 +27,44 @@ import java.util.UUID;
 public class FileService {
 
     private final FileRepository fileRepository;
+    private final FileDTOMapper fileDTOMapper;
 
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-    public FileDTO upload(MultipartFile multipartFile, FileDTO fileDTO, User owner) throws IOException {
-        UUID fileUuid = UUID.randomUUID();
+    public FileDTO upload(
+        MultipartFile multipartFile,
+        File file,
+        Long dayBeforeExpiration,
+        User owner
+    ) {
 
-        saveToLocalStorage(multipartFile, fileUuid);
-
-        File file = new File();
-        file.setUuid(fileUuid);
         file.setName(multipartFile.getOriginalFilename());
         file.setSize(multipartFile.getSize());
         file.setMimeType(multipartFile.getContentType());
-        file.setExpiredAt(computeExpiredAt(fileDTO.getDayBeforeExpiration()));
-        file.setPassword(fileDTO.getPassword());
+        file.setExpiredAt(this.computeExpiredAt(dayBeforeExpiration));
         file.setOwner(owner);
 
         File saved = fileRepository.save(file);
         log.info("File saved: uuid={}, owner={}", saved.getUuid(), owner.getUsername());
 
-        return toDTO(saved, fileDTO.getDayBeforeExpiration());
+
+        this.saveToLocalStorage(multipartFile, file.getUuid());
+
+        return fileDTOMapper.toDTO(saved);
     }
 
     private LocalDateTime computeExpiredAt(Long dayBeforeExpiration) {
         return LocalDateTime.now().plusDays(dayBeforeExpiration);
     }
 
-    private void saveToLocalStorage(MultipartFile multipartFile, UUID fileUuid) throws IOException {
-        Path uploadPath = Paths.get(uploadDir);
-        Files.createDirectories(uploadPath);
-        Path destination = uploadPath.resolve(fileUuid.toString());
-        multipartFile.transferTo(destination);
-    }
-
-    private FileDTO toDTO(File file, Long dayBeforeExpiration) {
-        FileDTO dto = new FileDTO();
-        dto.setUuid(file.getUuid());
-        dto.setName(file.getName());
-        dto.setSize(file.getSize());
-        dto.setMimeType(file.getMimeType());
-        dto.setCreatedAt(file.getCreatedAt());
-        dto.setDayBeforeExpiration(dayBeforeExpiration);
-        return dto;
+    private void saveToLocalStorage(MultipartFile multipartFile, UUID fileUuid) {
+        try {
+            Path uploadPath = Paths.get(uploadDir);
+            Files.createDirectories(uploadPath);
+            multipartFile.transferTo(uploadPath.resolve(fileUuid.toString()));
+        } catch (IOException e) {
+            throw new FileStorageException("Échec de la sauvegarde du fichier uuid=" + fileUuid, e);
+        }
     }
 }
