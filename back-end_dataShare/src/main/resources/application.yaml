@@ -43,6 +43,9 @@ management:
       exposure:
         include: '*'
 
+file:
+  upload-dir: files
+
 springdoc:
   api-docs:
     path: /api-docs
