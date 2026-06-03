@@ -47,7 +47,7 @@ describe('RegisterComponent', () => {
     component.onSubmit();
 
     // THEN
-    const req = httpMock.expectOne('/api/register');
+    const req = httpMock.expectOne('/api/users');
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual({ email: 'test@gmail.com', password: 'password123' });
     req.flush(null, { status: 201, statusText: 'Created' });

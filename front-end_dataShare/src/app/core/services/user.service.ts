@@ -10,10 +10,10 @@ export class UserService {
   constructor(private httpClient: HttpClient) { }
 
   register(registerDTO: RegisterDTO): Observable<Object> {
-    return this.httpClient.post('/api/register', registerDTO);
+    return this.httpClient.post('/api/users', registerDTO);
   }
 
   login(loginDTO: LoginDTO): Observable<string> {
-    return this.httpClient.post('/api/login', loginDTO, { responseType: 'text' });
+    return this.httpClient.post('/api/users/login', loginDTO, { responseType: 'text' });
   }
 }

@@ -1,0 +1,82 @@
+<div class="background">
+  <nav class="navbar">
+    <a class="brand" routerLink="/home">DataShare</a>
+    @if (isLoggedIn) {
+      <button class="btn-mySpace" routerLink="/mySpace">Mon espace</button>
+    } @else {
+      <button class="btn-login" routerLink="/login">Se connecter</button>
+    }
+  </nav>
+
+  <main class="main-content">
+    <div class="card">
+      <h1 class="card-title">Télécharger un fichier</h1>
+
+      @if (loading) {
+        <p class="loading">Chargement...</p>
+      } @else if (errorMessage && !fileResponseDTO) {
+        <div class="banner banner--error">
+          <i class="fa-solid fa-circle-info"></i>
+          {{ errorMessage }}
+        </div>
+      } @else if (isExpired) {
+        <div class="banner banner--error">
+          <i class="fa-solid fa-circle-info"></i>
+          Ce fichier n'est plus disponible en téléchargement car il a expiré.
+        </div>
+      } @else if (fileResponseDTO) {
+        <div class="file-row">
+          <i class="fa-regular fa-file-image file-icon"></i>
+          <div class="file-info">
+            <span class="file-name">{{ fileResponseDTO.name }}</span>
+            <span class="file-size">{{ fileSizeMo }}</span>
+          </div>
+        </div>
+
+        @if (daysRemaining === 1) {
+          <div class="banner banner--warning">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            Ce fichier expirera demain.
+          </div>
+        } @else {
+          <div class="banner banner--info">
+            <i class="fa-solid fa-circle-info"></i>
+            Ce fichier expirera dans {{ daysRemaining }} jours.
+          </div>
+        }
+
+        @if (hasPassword) {
+          <div class="form-group">
+            <label for="password">Mot de passe</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              [(ngModel)]="password"
+              placeholder="Saisissez le mot de passe..."
+            />
+          </div>
+        }
+
+        @if (errorMessage) {
+          <p class="error-text">{{ errorMessage }}</p>
+        }
+
+        <button
+          class="btn-download"
+          type="button"
+          data-cy="download-btn"
+          [disabled]="hasPassword && !password"
+          (click)="onDownload()"
+        >
+          <i class="fa-solid fa-cloud-arrow-down"></i>
+          Télécharger
+        </button>
+      }
+    </div>
+  </main>
+
+  <footer class="footer">
+    <span>Copyright DataShare&reg; 2025</span>
+  </footer>
+</div>

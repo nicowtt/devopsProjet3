@@ -1,8 +1,11 @@
-export interface FileDTO {
+export interface FileRequestDTO {
+  dayBeforeExpiration: number,
+  password?: string,
+}
+export interface FileResponseDTO {
   uuid?: string,
   name: string,
   size?: number,
-  dayBeforeExpiration: number,
-  password?: string,
-  expiredAt?: string
+  expiredAt: string,
+  hasPassword?: boolean,
 }

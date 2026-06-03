@@ -1,6 +1,6 @@
 package com.openclassrooms.dataShare.service;
 
-import com.openclassrooms.dataShare.dto.FileDTO;
+import com.openclassrooms.dataShare.dto.FileResponseDTO;
 import com.openclassrooms.dataShare.entities.File;
 import com.openclassrooms.dataShare.entities.User;
 import com.openclassrooms.dataShare.exception.FileStorageException;
@@ -24,6 +24,8 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import java.util.Optional;
+
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -54,17 +56,16 @@ class FileServiceTest {
         User owner = new User();
         File file = new File();
         file.setUuid(UUID.randomUUID());
-        FileDTO expectedDTO = new FileDTO();
-        expectedDTO.setDayBeforeExpiration(7L);
+        FileResponseDTO expectedDTO = new FileResponseDTO();
 
         when(multipartFile.getOriginalFilename()).thenReturn("test.pdf");
         when(multipartFile.getSize()).thenReturn(1024L);
         when(multipartFile.getContentType()).thenReturn("application/pdf");
         when(fileRepository.save(any())).thenReturn(file);
-        when(fileDTOMapper.toDTO(file)).thenReturn(expectedDTO);
+        when(fileDTOMapper.toFileResponseDTO(file)).thenReturn(expectedDTO);
 
         // WHEN
-        FileDTO result = fileService.upload(multipartFile, file, 7L, owner);
+        FileResponseDTO result = fileService.upload(multipartFile, file, 7L, owner);
 
         // THEN
         verify(fileRepository).save(file);
@@ -83,7 +84,7 @@ class FileServiceTest {
         when(multipartFile.getSize()).thenReturn(1024L);
         when(multipartFile.getContentType()).thenReturn("application/pdf");
         when(fileRepository.save(any())).thenReturn(file);
-        when(fileDTOMapper.toDTO(any())).thenReturn(new FileDTO());
+        when(fileDTOMapper.toFileResponseDTO(any())).thenReturn(new FileResponseDTO());
 
         // WHEN
         fileService.upload(multipartFile, file, 7L, owner);
@@ -109,5 +110,53 @@ class FileServiceTest {
         // THEN
         assertThrows(FileStorageException.class,
             () -> fileService.upload(multipartFile, file, 7L, owner));
+    }
+
+    @Test
+    void test_get_throws_ResourceNotFoundException_when_uuid_not_found() {
+        // GIVEN
+        UUID uuid = UUID.randomUUID();
+        when(fileRepository.findByUuid(uuid)).thenReturn(Optional.empty());
+
+        // THEN
+        assertThrows(com.openclassrooms.dataShare.exception.ResourceNotFoundException.class,
+            () -> fileService.get(uuid));
+    }
+
+    @Test
+    void test_get_returns_dto_with_protected_true_when_password_set() {
+        // GIVEN
+        UUID uuid = UUID.randomUUID();
+        File file = new File();
+        file.setUuid(uuid);
+        file.setPassword("secret");
+        FileResponseDTO dto = new FileResponseDTO();
+
+        when(fileRepository.findByUuid(uuid)).thenReturn(Optional.of(file));
+        when(fileDTOMapper.toFileResponseDTO(file)).thenReturn(dto);
+
+        // WHEN
+        FileResponseDTO result = fileService.get(uuid);
+
+        // THEN
+        assertThat(result.isHasPassword()).isTrue();
+    }
+
+    @Test
+    void test_get_returns_dto_with_protected_false_when_no_password() {
+        // GIVEN
+        UUID uuid = UUID.randomUUID();
+        File file = new File();
+        file.setUuid(uuid);
+        FileResponseDTO dto = new FileResponseDTO();
+
+        when(fileRepository.findByUuid(uuid)).thenReturn(Optional.of(file));
+        when(fileDTOMapper.toFileResponseDTO(file)).thenReturn(dto);
+
+        // WHEN
+        FileResponseDTO result = fileService.get(uuid);
+
+        // THEN
+        assertThat(result.isHasPassword()).isFalse();
     }
 }

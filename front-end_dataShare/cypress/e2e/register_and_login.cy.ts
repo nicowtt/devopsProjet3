@@ -4,7 +4,7 @@ describe('register and login', () => {
 
   it('Register new cypress user', () => {
     // GIVEN
-    cy.intercept('POST', '/api/register', { statusCode: 200, body: {} }).as('register');
+    cy.intercept('POST', '/api/users', { statusCode: 200, body: {} }).as('register');
     cy.visit('/register');
 
     // WHEN
@@ -20,7 +20,7 @@ describe('register and login', () => {
 
   it('Login with bad password', () => {
     // GIVEN
-    cy.intercept('POST', '/api/login', { statusCode: 401, body: 'Unauthorized' }).as('loginFailed');
+    cy.intercept('POST', '/api/users/login', { statusCode: 401, body: 'Unauthorized' }).as('loginFailed');
     cy.visit('/login');
 
     // WHEN
@@ -35,8 +35,7 @@ describe('register and login', () => {
 
   it('Login new cypress user', () => {
     // GIVEN
-    cy.intercept('POST', '/api/login', { statusCode: 200, body: TOKEN }).as('login');
-    cy.intercept('GET', '/api/getStudentList', []).as('getStudents');
+    cy.intercept('POST', '/api/users/login', { statusCode: 200, body: TOKEN }).as('login');
     cy.visit('/login');
 
     // WHEN

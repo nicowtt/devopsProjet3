@@ -42,7 +42,7 @@ describe('UserService', () => {
       service.register(newUser).subscribe();
 
       // THEN
-      const req = httpMock.expectOne('/api/register');
+      const req = httpMock.expectOne('/api/users');
       expect(req.request.method).toBe('POST');
       expect(req.request.body).toEqual(newUser);
       req.flush(null, { status: 201, statusText: 'Created' });
@@ -59,7 +59,7 @@ describe('UserService', () => {
       service.login(loginRequestDTO).subscribe();
 
       // THEN
-      const req = httpMock.expectOne('/api/login');
+      const req = httpMock.expectOne('/api/users/login');
       expect(req.request.method).toBe('POST');
       expect(req.request.body).toEqual(loginRequestDTO);
       req.flush(fakeToken);
@@ -75,7 +75,7 @@ describe('UserService', () => {
       });
 
       // THEN
-      const req = httpMock.expectOne('/api/login');
+      const req = httpMock.expectOne('/api/users/login');
       req.flush(null, { status: 401, statusText: 'Unauthorized' });
     });
   });

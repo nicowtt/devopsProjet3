@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'https://datashare.fr'
+  baseUrl: 'https://datashare.fr'
 };

@@ -2,7 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { FileService } from '../../../core/services/file.service';
-import { FileDTO } from '../../../core/models/file.model';
+import { FileRequestDTO, FileResponseDTO } from '../../../core/models/file.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { environment } from '../../../../environments/environment';
 
@@ -100,14 +100,13 @@ export class UploadComponent {
     }
     this.passwordError = '';
     this.errorMessage = '';
-    const fileDTO: FileDTO = {
-      name: this.selectedFile.name,
+    const fileRequestDTO: FileRequestDTO = {
       dayBeforeExpiration: this.expiration,
       ...(this.password ? { password: this.password } : {})
     };
-    this.fileService.upload(this.selectedFile, fileDTO).subscribe({
-      next: (response: FileDTO) => {
-        this.shareUrl = `${environment.apiBaseUrl}/${response.uuid}`;
+    this.fileService.upload(this.selectedFile, fileRequestDTO).subscribe({
+      next: (fileResponseDTO: FileResponseDTO) => {
+        this.shareUrl = `${environment.baseUrl}/download/${fileResponseDTO.uuid}`;
       },
       error: (err) => {
         this.errorMessage = err.error?.message || 'Une erreur est survenue lors du téléversement.';

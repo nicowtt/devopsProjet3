@@ -48,9 +48,9 @@
 .card {
   background: #fff;
   border-radius: 16px;
-  padding: 40px;
+  padding: 28px 32px;
   width: 100%;
-  max-width: 560px;
+  max-width: 420px;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
 }
 
@@ -271,4 +271,28 @@
   padding: 16px 32px;
   color: rgba(255, 255, 255, 0.85);
   font-size: 0.85rem;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .navbar {
+    padding: 12px 20px;
+  }
+
+  .main-content {
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 0;
+  }
+
+  .card {
+    border-radius: 24px 24px 0 0;
+    padding: 32px 24px 40px;
+    max-width: 100%;
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.1);
+  }
+
+  .footer {
+    display: none;
+  }
 }

@@ -1,9 +1,10 @@
 package com.openclassrooms.dataShare.service;
 
-import com.openclassrooms.dataShare.dto.FileDTO;
+import com.openclassrooms.dataShare.dto.FileResponseDTO;
 import com.openclassrooms.dataShare.entities.File;
 import com.openclassrooms.dataShare.entities.User;
 import com.openclassrooms.dataShare.exception.FileStorageException;
+import com.openclassrooms.dataShare.exception.ResourceNotFoundException;
 import com.openclassrooms.dataShare.mapper.FileDTOMapper;
 import com.openclassrooms.dataShare.repository.FileRepository;
 import jakarta.transaction.Transactional;
@@ -32,13 +33,13 @@ public class FileService {
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-    public FileDTO upload(
+    public FileResponseDTO upload(
         MultipartFile multipartFile,
         File file,
         Long dayBeforeExpiration,
         User owner
     ) {
-
+        // TODO check mime type to accept only pdf, jpg et svg...
         file.setName(multipartFile.getOriginalFilename());
         file.setSize(multipartFile.getSize());
         file.setMimeType(multipartFile.getContentType());
@@ -51,7 +52,21 @@ public class FileService {
 
         this.saveToLocalStorage(multipartFile, file.getUuid());
 
-        return fileDTOMapper.toDTO(saved);
+        return fileDTOMapper.toFileResponseDTO(saved);
+    }
+
+    public FileResponseDTO get(
+        UUID fileUuid
+    ) {
+        // TODO check password match and encode/decode with Bcrypt
+        File fileDb = fileRepository.findByUuid(fileUuid)
+            .orElseThrow(() -> new ResourceNotFoundException("Resource not found"));
+        FileResponseDTO fileResponseDTO = fileDTOMapper.toFileResponseDTO(fileDb);
+        if (fileDb.getPassword() != null) {
+            fileResponseDTO.setHasPassword(true);
+        }
+        return fileResponseDTO;
+
     }
 
     private LocalDateTime computeExpiredAt(Long dayBeforeExpiration) {

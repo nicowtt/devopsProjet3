@@ -25,7 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @Testcontainers
 class UserControllerTest extends AbstractIntegrationTest {
 
-    private static final String URL = "/api/register";
+    private static final String REGISTER_URL = "/api/users";
+    private static final String LOGIN_URL = "/api/users/login";
     private static final String EMAIL = "email@gmail.com";
     private static final String PASSWORD = "password";
 
@@ -51,10 +52,12 @@ class UserControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void registerUserWithoutRequiredData() throws Exception {
+    void test_register_User_Without_Required_Data() throws Exception {
+        // GIVEN
         RegisterDTO registerDTO = new RegisterDTO();
 
-        mockMvc.perform(MockMvcRequestBuilders.post(URL)
+        // THEN
+        mockMvc.perform(MockMvcRequestBuilders.post(REGISTER_URL)
                 .content(objectMapper.writeValueAsString(registerDTO))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -63,7 +66,8 @@ class UserControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void registerAlreadyExistUser() throws Exception {
+    void test_register_Already_Exist_User() throws Exception {
+        // GIVEN
         User user = new User();
         user.setEmail(EMAIL);
         user.setPassword(PASSWORD);
@@ -73,7 +77,8 @@ class UserControllerTest extends AbstractIntegrationTest {
         registerDTO.setEmail(EMAIL);
         registerDTO.setPassword(PASSWORD);
 
-        mockMvc.perform(MockMvcRequestBuilders.post(URL)
+        // THEN
+        mockMvc.perform(MockMvcRequestBuilders.post(REGISTER_URL)
                 .content(objectMapper.writeValueAsString(registerDTO))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -82,12 +87,14 @@ class UserControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void registerUserSuccessful() throws Exception {
+    void test_register_User_Successful() throws Exception {
+        // GIVEN
         RegisterDTO registerDTO = new RegisterDTO();
         registerDTO.setEmail(EMAIL);
         registerDTO.setPassword(PASSWORD);
 
-        mockMvc.perform(MockMvcRequestBuilders.post(URL)
+        // THEN
+        mockMvc.perform(MockMvcRequestBuilders.post(REGISTER_URL)
                 .content(objectMapper.writeValueAsString(registerDTO))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -96,10 +103,12 @@ class UserControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void loginWithoutRequiredData() throws Exception {
+    void test_login_Without_Required_Data() throws Exception {
+        // GIVEN
         LoginDTO loginDTO = new LoginDTO();
 
-        mockMvc.perform(MockMvcRequestBuilders.post(URL)
+        // THEN
+        mockMvc.perform(MockMvcRequestBuilders.post(LOGIN_URL)
                 .content(objectMapper.writeValueAsString(loginDTO))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -107,6 +116,24 @@ class UserControllerTest extends AbstractIntegrationTest {
             .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
-    // login test successful is on AbstractIntegrationTest.
-    // It will be using before each authenticated integrated test.
+    @Test
+    void test_login_successful_returns_200_with_token() throws Exception {
+        // GIVEN
+        User user = new User();
+        user.setEmail(EMAIL);
+        user.setPassword(PASSWORD);
+        userService.register(user);
+
+        LoginDTO loginDTO = new LoginDTO();
+        loginDTO.setEmail(EMAIL);
+        loginDTO.setPassword(PASSWORD);
+
+        // THEN
+        mockMvc.perform(MockMvcRequestBuilders.post(LOGIN_URL)
+                .content(objectMapper.writeValueAsString(loginDTO))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andExpect(MockMvcResultMatchers.status().isOk());
+    }
 }

@@ -1,6 +1,7 @@
 package com.openclassrooms.dataShare.mapper;
 
-import com.openclassrooms.dataShare.dto.FileDTO;
+import com.openclassrooms.dataShare.dto.FileRequestDTO;
+import com.openclassrooms.dataShare.dto.FileResponseDTO;
 import com.openclassrooms.dataShare.entities.File;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -17,9 +18,8 @@ public interface FileDTOMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "expiredAt", ignore = true)
     @Mapping(target = "owner", ignore = true)
-    File toEntity(FileDTO fileDTO);
+    File toEntity(FileRequestDTO fileRequestDTO);
 
-    @Mapping(target = "dayBeforeExpiration", ignore = true)
-    @Mapping(target = "password", ignore = true)
-    FileDTO toDTO(File file);
+    @Mapping(target = "hasPassword", ignore = true)
+    FileResponseDTO toFileResponseDTO(File file);
 }

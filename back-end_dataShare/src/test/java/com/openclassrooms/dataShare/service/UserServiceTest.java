@@ -34,15 +34,6 @@ class UserServiceTest {
     private UserService userService;
 
     @Test
-    public void test_create_null_user_throws_IllegalArgumentException() {
-        // GIVEN
-
-        // THEN
-        Assertions.assertThrows(IllegalArgumentException.class,
-                () -> userService.register(null));
-    }
-
-    @Test
     public void test_create_already_exist_user_throws_IllegalArgumentException() {
         // GIVEN
         User user = new User();

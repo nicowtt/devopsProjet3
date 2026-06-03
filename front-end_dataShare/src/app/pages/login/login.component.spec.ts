@@ -47,7 +47,7 @@ describe('LoginComponent', () => {
     component.onSubmit();
 
     // THEN
-    const req = httpMock.expectOne('/api/login');
+    const req = httpMock.expectOne('/api/users/login');
     expect(req.request.method).toBe('POST');
     req.flush('fake-jwt-token', { status: 200, statusText: 'OK' });
 

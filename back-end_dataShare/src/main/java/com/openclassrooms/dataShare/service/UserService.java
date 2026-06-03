@@ -4,6 +4,7 @@ import com.openclassrooms.dataShare.dto.LoginDTO;
 import com.openclassrooms.dataShare.entities.User;
 import com.openclassrooms.dataShare.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -23,7 +24,6 @@ public class UserService {
     private final JwtService jwtService;
 
     public void register(User user) {
-        Assert.notNull(user, "User must not be null");
         log.info("Registering new user");
 
         Optional<User> optionalUser = userRepository.findByEmail(user.getEmail());
@@ -35,8 +35,6 @@ public class UserService {
     }
 
     public String login(User user) {
-        Assert.notNull(user.getEmail(), "Login email must not be null");
-        Assert.notNull(user.getPassword(), "Password must not be null");
         Optional<User> userDb = userRepository.findByEmail(user.getEmail());
         if (userDb.isPresent() && passwordEncoder.matches(user.getPassword(), userDb.get().getPassword())) {
             return jwtService.generateToken(userDb.get());

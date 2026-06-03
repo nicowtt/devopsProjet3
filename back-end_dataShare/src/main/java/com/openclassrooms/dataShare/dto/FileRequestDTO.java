@@ -10,18 +10,12 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
-public class FileDTO {
-
-    private UUID uuid;
-
-    private String name;
+public class FileRequestDTO {
 
     @NotNull
     @Min(1)
     @Max(7)
     private Long dayBeforeExpiration;
-
-    private LocalDateTime expiredAt;
 
     @Size(min = 6)
     private String password;

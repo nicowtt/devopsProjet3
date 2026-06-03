@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Authentification", description = "Inscription et connexion des utilisateurs")
 @RestController
-@RequestMapping
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -33,7 +33,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Email déjà utilisé", content = @Content)
         }
     )
-    @PostMapping("/api/register")
+    @PostMapping
     public ResponseEntity<?> register(@Valid @RequestBody RegisterDTO registerDTO) {
         userService.register(userDTOMapper.toEntity(registerDTO));
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -46,8 +46,8 @@ public class UserController {
             @ApiResponse(responseCode = "401", description = "Identifiants incorrects", content = @Content)
         }
     )
-    @PostMapping("/api/login")
-    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@Valid @RequestBody LoginDTO loginDTO) {
         String jwtToken = userService.login(userDTOMapper.toEntity(loginDTO));
         return ResponseEntity.ok(jwtToken);
     }

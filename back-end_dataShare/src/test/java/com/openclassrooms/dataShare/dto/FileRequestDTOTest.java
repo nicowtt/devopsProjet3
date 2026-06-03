@@ -11,7 +11,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class FileDTOTest {
+class FileRequestDTOTest {
 
     private Validator validator;
 
@@ -24,11 +24,11 @@ class FileDTOTest {
     @Test
     void test_valid_dto_no_violations() {
         // GIVEN
-        FileDTO dto = new FileDTO();
+        FileRequestDTO dto = new FileRequestDTO();
         dto.setDayBeforeExpiration(7L);
 
         // WHEN
-        Set<ConstraintViolation<FileDTO>> violations = validator.validate(dto);
+        Set<ConstraintViolation<FileRequestDTO>> violations = validator.validate(dto);
 
         // THEN
         assertThat(violations).isEmpty();
@@ -37,11 +37,11 @@ class FileDTOTest {
     @Test
     void test_null_dayBeforeExpiration_has_violation() {
         // GIVEN
-        FileDTO dto = new FileDTO();
+        FileRequestDTO dto = new FileRequestDTO();
         dto.setDayBeforeExpiration(null);
 
         // WHEN
-        Set<ConstraintViolation<FileDTO>> violations = validator.validate(dto);
+        Set<ConstraintViolation<FileRequestDTO>> violations = validator.validate(dto);
 
         // THEN
         assertThat(violations).isNotEmpty();
@@ -51,11 +51,11 @@ class FileDTOTest {
     @Test
     void test_zero_dayBeforeExpiration_has_violation() {
         // GIVEN
-        FileDTO dto = new FileDTO();
+        FileRequestDTO dto = new FileRequestDTO();
         dto.setDayBeforeExpiration(0L);
 
         // WHEN
-        Set<ConstraintViolation<FileDTO>> violations = validator.validate(dto);
+        Set<ConstraintViolation<FileRequestDTO>> violations = validator.validate(dto);
 
         // THEN
         assertThat(violations).isNotEmpty();
@@ -65,11 +65,11 @@ class FileDTOTest {
     @Test
     void test_dayBeforeExpiration_above_max_has_violation() {
         // GIVEN
-        FileDTO dto = new FileDTO();
+        FileRequestDTO dto = new FileRequestDTO();
         dto.setDayBeforeExpiration(8L);
 
         // WHEN
-        Set<ConstraintViolation<FileDTO>> violations = validator.validate(dto);
+        Set<ConstraintViolation<FileRequestDTO>> violations = validator.validate(dto);
 
         // THEN
         assertThat(violations).isNotEmpty();
@@ -79,11 +79,11 @@ class FileDTOTest {
     @Test
     void test_negative_dayBeforeExpiration_has_violation() {
         // GIVEN
-        FileDTO dto = new FileDTO();
+        FileRequestDTO dto = new FileRequestDTO();
         dto.setDayBeforeExpiration(-1L);
 
         // WHEN
-        Set<ConstraintViolation<FileDTO>> violations = validator.validate(dto);
+        Set<ConstraintViolation<FileRequestDTO>> violations = validator.validate(dto);
 
         // THEN
         assertThat(violations).isNotEmpty();
