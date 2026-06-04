@@ -76,7 +76,8 @@
 }
 
 .file-icon {
-  font-size: 2rem;
+  display: flex;
+  align-items: center;
   color: #9ca3af;
   flex-shrink: 0;
 }

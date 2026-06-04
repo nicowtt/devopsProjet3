@@ -20,6 +20,6 @@ public interface FileDTOMapper {
     @Mapping(target = "owner", ignore = true)
     File toEntity(FileRequestDTO fileRequestDTO);
 
-    @Mapping(target = "hasPassword", ignore = true)
+    @Mapping(target = "hasPassword", expression = "java(file.getPassword() != null && !file.getPassword().isBlank())")
     FileResponseDTO toFileResponseDTO(File file);
 }

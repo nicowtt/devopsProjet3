@@ -2,7 +2,7 @@
   <nav class="navbar">
     <a class="brand" routerLink="/home">DataShare</a>
     @if (isLoggedIn) {
-      <button class="btn-mySpace" routerLink="/mySpace">Mon espace</button>
+      <button class="btn-mySpace" routerLink="/space">Mon espace</button>
     } @else {
       <button class="btn-login" routerLink="/login">Se connecter</button>
     }
@@ -11,7 +11,7 @@
   <div class="content">
     <p class="upload-label">Tu veux partager un fichier ?</p>
     <button class="upload-btn" type="button" routerLink="/upload">
-      <i class="fa-solid fa-cloud-arrow-up"></i>
+      <lucide-icon name="cloud-upload" [size]="40"></lucide-icon>
     </button>
   </div>
 

@@ -133,6 +133,11 @@
 			<version>${jjwt-jackson}</version>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-core</artifactId>
+			<version>3.1.0</version>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>

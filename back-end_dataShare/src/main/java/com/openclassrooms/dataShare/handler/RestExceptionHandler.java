@@ -1,6 +1,8 @@
 package com.openclassrooms.dataShare.handler;
 
+import com.openclassrooms.dataShare.exception.FileSizeExceededException;
 import com.openclassrooms.dataShare.exception.FileStorageException;
+import com.openclassrooms.dataShare.exception.InvalidFileTypeException;
 import com.openclassrooms.dataShare.exception.ResourceNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -45,6 +47,21 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 new HttpHeaders(), HttpStatus.FORBIDDEN, request);
     }
 
+    @ResponseStatus(HttpStatus.CONTENT_TOO_LARGE)
+    @ExceptionHandler(value = {FileSizeExceededException.class})
+    protected ResponseEntity<Object> handleFileSizeExceededException(FileSizeExceededException ex, WebRequest request) {
+        logError(ex);
+        return handleExceptionInternal(ex, getErrorDetails(ex, request),
+                new HttpHeaders(), HttpStatus.CONTENT_TOO_LARGE, request);
+    }
+
+    @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+    @ExceptionHandler(value = {InvalidFileTypeException.class})
+    protected ResponseEntity<Object> handleInvalidFileTypeException(InvalidFileTypeException invalidFileTypeException, WebRequest request) {
+        logError(invalidFileTypeException);
+        return handleExceptionInternal(invalidFileTypeException, getErrorDetails(invalidFileTypeException, request),
+                new HttpHeaders(), HttpStatus.UNSUPPORTED_MEDIA_TYPE, request);
+    }
 
     @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     @ExceptionHandler(value = {FileStorageException.class})

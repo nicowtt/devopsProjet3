@@ -3,7 +3,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 
 import { FileService } from './file.service';
-import { FileDTO } from '../models/file.model';
+import { FileDTO, FileResponseDTO } from '../models/file.model';
 
 describe('FileService', () => {
   let service: FileService;
@@ -27,6 +27,26 @@ describe('FileService', () => {
 
   it('should be created', () => {
     expect(service).toBeTruthy();
+  });
+
+  describe('getFiles()', () => {
+    it('must send GET request to /api/files and return list', () => {
+      // GIVEN
+      const mockFiles: FileResponseDTO[] = [
+        { uuid: '1', name: 'a.pdf', createdAt: '2024-01-01', expiredAt: '2099-01-01' },
+        { uuid: '2', name: 'b.png', createdAt: '2024-01-01', expiredAt: '2099-01-01' },
+      ];
+
+      // WHEN
+      let result: FileResponseDTO[] | undefined;
+      service.getFiles().subscribe(files => result = files);
+
+      // THEN
+      const req = httpMock.expectOne('/api/files');
+      expect(req.request.method).toBe('GET');
+      req.flush(mockFiles);
+      expect(result).toEqual(mockFiles);
+    });
   });
 
   describe('upload()', () => {

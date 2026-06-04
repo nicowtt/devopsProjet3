@@ -2,6 +2,7 @@ package com.openclassrooms.dataShare.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openclassrooms.dataShare.dto.FileRequestDTO;
+import com.openclassrooms.dataShare.exception.FileSizeExceededException;
 import com.openclassrooms.dataShare.exception.FileStorageException;
 import com.openclassrooms.dataShare.repository.FileRepository;
 import com.openclassrooms.dataShare.service.FileService;
@@ -18,6 +19,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.io.InputStream;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -57,6 +59,7 @@ class FileControllerTest extends AbstractIntegrationTest {
         fileRepository.deleteAll();
     }
 
+    // UPLOAD FILE
     @Test
     void test_upload_returns_201() throws Exception {
         // GIVEN
@@ -74,14 +77,42 @@ class FileControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void test_get_file_returns_404_when_not_found() throws Exception {
+    void test_upload_returns_413_when_file_exceeds_1GB() throws Exception {
         // GIVEN
-        UUID uuid = UUID.randomUUID();
+        FileRequestDTO fileRequestDTO = new FileRequestDTO();
+        fileRequestDTO.setDayBeforeExpiration(7L);
+
+        MockMultipartFile file = new MockMultipartFile("file", "big.pdf", "application/pdf", "content".getBytes());
+        MockPart metadata = new MockPart("metadata", objectMapper.writeValueAsBytes(fileRequestDTO));
+        metadata.getHeaders().setContentType(APPLICATION_JSON);
+
+        doThrow(new FileSizeExceededException("Fichier trop volumineux"))
+            .when(fileService).uploadFile(any(), any(), any(), any());
 
         // THEN
-        mockMvc.perform(get(URL + "/" + uuid))
+        mockMvc.perform(multipart(URL).file(file).part(metadata))
             .andDo(print())
-            .andExpect(status().isNotFound());
+            .andExpect(status().isContentTooLarge());
+    }
+
+    @Test
+    void test_upload_returns_415_when_exe_hidden_as_txt() throws Exception {
+        // GIVEN executable Windows file .exe hidden on .txt
+        byte[] exeContent;
+        try (InputStream is = getClass().getResourceAsStream("/testFiles/malicious.exe")) {
+            exeContent = is.readAllBytes();
+        }
+        MockMultipartFile file = new MockMultipartFile("file", "malicious.txt", "text/plain", exeContent);
+
+        FileRequestDTO fileRequestDTO = new FileRequestDTO();
+        fileRequestDTO.setDayBeforeExpiration(7L);
+        MockPart metadata = new MockPart("metadata", objectMapper.writeValueAsBytes(fileRequestDTO));
+        metadata.getHeaders().setContentType(APPLICATION_JSON);
+
+        // THEN
+        mockMvc.perform(multipart(URL).file(file).part(metadata))
+            .andDo(print())
+            .andExpect(status().isUnsupportedMediaType());
     }
 
     @Test
@@ -90,16 +121,28 @@ class FileControllerTest extends AbstractIntegrationTest {
         FileRequestDTO fileRequestDTO = new FileRequestDTO();
         fileRequestDTO.setDayBeforeExpiration(7L);
 
-        MockMultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "Hello world".getBytes());
+        MockMultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "test".getBytes());
         MockPart metadata = new MockPart("metadata", objectMapper.writeValueAsBytes(fileRequestDTO));
         metadata.getHeaders().setContentType(APPLICATION_JSON);
 
         doThrow(new FileStorageException("Échec disk", new RuntimeException()))
-            .when(fileService).upload(any(), any(), any(), any());
+            .when(fileService).uploadFile(any(), any(), any(), any());
 
         // THEN
         mockMvc.perform(multipart(URL).file(file).part(metadata))
             .andDo(print())
             .andExpect(status().isServiceUnavailable());
+    }
+
+    // DOWNLOAD FILES
+    @Test
+    void test_get_file_returns_404_when_not_found() throws Exception {
+        // GIVEN
+        UUID uuid = UUID.randomUUID();
+
+        // THEN
+        mockMvc.perform(get(URL + "/" + uuid))
+            .andDo(print())
+            .andExpect(status().isNotFound());
     }
 }

@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
+import { provideToastr, ToastrService } from 'ngx-toastr';
 
 import { UploadComponent } from './upload.component';
 
@@ -17,6 +18,7 @@ describe('UploadComponent', () => {
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([]),
+        provideToastr(),
       ]
     }).compileComponents();
 
@@ -52,13 +54,15 @@ describe('UploadComponent', () => {
   });
 
   it('onFileSelected should set selectedFile for valid file and error for file > 1 Go', () => {
-    const file = new File(['content'], 'test.pdf');
+    const file = new File(['content'], 'test.pdf', { type: 'application/pdf' });
     component.onFileSelected({ target: { files: [file], value: '' } } as unknown as Event);
     expect(component.selectedFile).toBe(file);
 
-    const bigFile = { size: 2_000_000_000, name: 'big.zip' } as File;
+    const toastr = TestBed.inject(ToastrService);
+    const warnSpy = jest.spyOn(toastr, 'warning');
+    const bigFile = { size: 2_000_000_000, name: 'big.zip', type: 'application/zip' } as File;
     component.onFileSelected({ target: { files: [bigFile], value: '' } } as unknown as Event);
-    expect(component.errorMessage).toBe('Le fichier ne doit pas dépasser 1 Go.');
+    expect(warnSpy).toHaveBeenCalledWith('Le fichier ne doit pas dépasser 1 Go.');
   });
 
   it('onDragOver should set isDragging, onDragLeave should reset it', () => {
@@ -69,13 +73,15 @@ describe('UploadComponent', () => {
   });
 
   it('onDrop should set selectedFile or errorMessage based on file size', () => {
-    const file = new File(['content'], 'drop.pdf');
+    const file = new File(['content'], 'drop.pdf', { type: 'application/pdf' });
     component.onDrop({ preventDefault: jest.fn(), dataTransfer: { files: [file] } } as unknown as DragEvent);
     expect(component.selectedFile).toBe(file);
 
-    const bigFile = { size: 2_000_000_000, name: 'big.zip' } as File;
+    const toastr2 = TestBed.inject(ToastrService);
+    const warnSpy2 = jest.spyOn(toastr2, 'warning');
+    const bigFile = { size: 2_000_000_000, name: 'big.zip', type: 'application/zip' } as File;
     component.onDrop({ preventDefault: jest.fn(), dataTransfer: { files: [bigFile] } } as unknown as DragEvent);
-    expect(component.errorMessage).toBe('Le fichier ne doit pas dépasser 1 Go.');
+    expect(warnSpy2).toHaveBeenCalledWith('Le fichier ne doit pas dépasser 1 Go.');
   });
 
   it('onSubmit should set passwordError when password is too short', () => {

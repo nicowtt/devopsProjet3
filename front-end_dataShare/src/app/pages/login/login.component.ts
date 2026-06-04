@@ -4,6 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { UserService } from '../../core/services/user.service';
 import { LoginDTO } from '../../core/models/user.model';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -14,13 +15,13 @@ import { LoginDTO } from '../../core/models/user.model';
 })
 export class LoginComponent {
   loginForm: FormGroup;
-  errorMessage = '';
 
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -43,10 +44,11 @@ export class LoginComponent {
     this.userService.login(loginDTO).subscribe({
       next: (token) => {
         this.authService.saveToken(token);
+        this.toastr.success('Connexion réussie !');
         this.router.navigate(['/']);
       },
       error: (err) => {
-        this.errorMessage = err.error?.message || 'Email ou mot de passe incorrect.';
+        this.toastr.error(err.error?.message || 'Email ou mot de passe incorrect.');
       }
     });
   }

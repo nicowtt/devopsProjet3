@@ -27,4 +27,8 @@ export class FileService {
       responseType: 'blob' as const
     }) as Observable<Blob>;
   }
+
+  getFiles(): Observable<FileResponseDTO[]> {
+    return this.httpClient.get<FileResponseDTO[]>('/api/files');
+  }
 }

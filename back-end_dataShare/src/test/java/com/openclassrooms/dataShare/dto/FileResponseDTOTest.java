@@ -19,12 +19,14 @@ class FileResponseDTOTest {
         // GIVEN
         FileResponseDTO dto = new FileResponseDTO();
         UUID uuid = UUID.randomUUID();
+        LocalDateTime createdAt = LocalDateTime.now();
         LocalDateTime expiredAt = LocalDateTime.now().plusDays(7);
 
         // WHEN
         dto.setUuid(uuid);
         dto.setName("document.pdf");
         dto.setSize(2048L);
+        dto.setCreatedAt(createdAt);
         dto.setExpiredAt(expiredAt);
         dto.setHasPassword(true);
 
@@ -32,6 +34,7 @@ class FileResponseDTOTest {
         assertThat(dto.getUuid()).isEqualTo(uuid);
         assertThat(dto.getName()).isEqualTo("document.pdf");
         assertThat(dto.getSize()).isEqualTo(2048L);
+        assertThat(dto.getCreatedAt()).isEqualTo(createdAt);
         assertThat(dto.getExpiredAt()).isEqualTo(expiredAt);
         assertThat(dto.isHasPassword()).isTrue();
     }

@@ -4,6 +4,8 @@ import { LoginComponent } from './pages/login/login.component';
 import { HomeComponent } from './pages/home/home.component';
 import { UploadComponent } from './pages/files/upload/upload.component';
 import { DownloadComponent } from './pages/files/download/download.component';
+import { SpaceComponent } from './pages/space/space.component';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -30,5 +32,10 @@ export const routes: Routes = [
   {
     path: 'download/:uuid',
     component: DownloadComponent
+  },
+  {
+    path: 'space',
+    component: SpaceComponent,
+    canActivate: [authGuard]
   }
 ];

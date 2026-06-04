@@ -14,7 +14,11 @@ public class FileResponseDTO {
 
     private Long size;
 
+    private LocalDateTime createdAt;
+
     private LocalDateTime expiredAt;
 
     private boolean hasPassword;
+
+
 }

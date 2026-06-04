@@ -1,0 +1,93 @@
+<div class="layout">
+
+  <!-- sideBar mobile -->
+  @if (sidebarOpen) {
+    <div class="overlay" (click)="sidebarOpen = false"></div>
+  }
+
+  <!-- Sidebar -->
+  <aside class="sidebar" [class.sidebar--open]="sidebarOpen">
+    <div class="sidebar-header">
+      <a class="brand" routerLink="/home">DataShare</a>
+      <button class="btn-close" (click)="sidebarOpen = false">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <nav class="sidebar-nav">
+      <a class="nav-item nav-item--active">
+        Mes fichiers
+      </a>
+    </nav>
+    <footer class="sidebar-footer">Copyright DataShare&reg; 2025</footer>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="topbar">
+      <button class="btn-hamburger" (click)="sidebarOpen = true">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <div class="topbar-actions">
+        <button class="btn-add" routerLink="/upload">Ajouter des fichiers</button>
+        <button class="btn-logout" (click)="logout()">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          Déconnexion
+        </button>
+      </div>
+    </div>
+
+    <div class="content">
+      <h1 class="page-title">Mes fichiers</h1>
+
+      <div class="filters">
+        <button class="filter-btn" [class.filter-btn--active]="filter === 'tous'" (click)="setFilter('tous')">Tous</button>
+        <button class="filter-btn" [class.filter-btn--active]="filter === 'actifs'" (click)="setFilter('actifs')">Actifs</button>
+        <button class="filter-btn" [class.filter-btn--active]="filter === 'expire'" (click)="setFilter('expire')">Expiré</button>
+      </div>
+
+      <div class="file-list">
+        @for (file of filteredFiles; track file.uuid) {
+          <div class="file-row">
+            <lucide-icon [name]="fileIconName(file)" class="file-icon" [size]="18"></lucide-icon>
+
+            <div class="file-info">
+              <span class="file-name">{{ file.name }}</span>
+              <span class="file-expiry" [class.file-expiry--expired]="isExpired(file)">
+                @if (isExpired(file)) {
+                  {{ fileSize(file) }} · {{ file.createdAt | date:'dd/MM/yyyy' }}
+                } @else {
+                  {{ fileSize(file) }} · {{ file.createdAt | date:'dd/MM/yyyy' }} · {{ expiryText(file) }}
+                }
+              </span>
+            </div>
+
+            @if (file.hasPassword) {
+              <lucide-icon name="lock" class="lock-icon" [size]="16"></lucide-icon>
+            }
+
+            @if (!isExpired(file)) {
+              <div class="file-actions desktop-actions">
+                <button class="btn-access" (click)="navigateToFile(file.uuid!)">
+                  Accéder <i class="fa-solid fa-arrow-right"></i>
+                </button>
+              </div>
+
+              <div class="file-actions mobile-actions">
+                <button class="btn-dots" (click)="toggleMenu(file.uuid!)">
+                  <i class="fa-solid fa-ellipsis-vertical"></i>
+                </button>
+                @if (openMenuUuid === file.uuid) {
+                  <div class="dropdown">
+                    <button (click)="navigateToFile(file.uuid!)">Accéder</button>
+                  </div>
+                }
+              </div>
+            } @else {
+              <span class="expired-msg">Ce fichier a expiré, il n'est plus stocké chez nous</span>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

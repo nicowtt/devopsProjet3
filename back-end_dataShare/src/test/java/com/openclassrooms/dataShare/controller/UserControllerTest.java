@@ -51,6 +51,7 @@ class UserControllerTest extends AbstractIntegrationTest {
         userRepository.deleteAll();
     }
 
+    // REGISTER NEW USER
     @Test
     void test_register_User_Without_Required_Data() throws Exception {
         // GIVEN
@@ -102,6 +103,7 @@ class UserControllerTest extends AbstractIntegrationTest {
             .andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
+    // LOGIN TEST
     @Test
     void test_login_Without_Required_Data() throws Exception {
         // GIVEN

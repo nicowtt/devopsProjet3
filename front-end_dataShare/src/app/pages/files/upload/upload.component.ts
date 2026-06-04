@@ -1,6 +1,8 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { formatFileSize, ALLOWED_MIME_TYPES, ACCEPT_FILE_TYPE } from '../../../shared/file.util';
 import { FileService } from '../../../core/services/file.service';
 import { FileRequestDTO, FileResponseDTO } from '../../../core/models/file.model';
 import { AuthService } from '../../../core/services/auth.service';
@@ -16,6 +18,7 @@ import { environment } from '../../../../environments/environment';
 export class UploadComponent {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   isLoggedIn = false;
+  readonly acceptFileType = ACCEPT_FILE_TYPE;
 
   selectedFile: File | null = null;
   isDragging = false;
@@ -28,14 +31,15 @@ export class UploadComponent {
 
   constructor(
     private fileService: FileService,
-    private authService: AuthService
+    private authService: AuthService,
+    private toastr: ToastrService
   ) {
     this.isLoggedIn = this.authService.isLoggedIn();
   }
 
   get fileSizeMo(): string {
     if (!this.selectedFile) return '';
-    return (this.selectedFile.size / 1_000_000).toFixed(1) + ' Mo';
+    return formatFileSize(this.selectedFile.size);
   }
 
   get truncatedName(): string {
@@ -52,8 +56,13 @@ export class UploadComponent {
     const input = event.target as HTMLInputElement;
     if (!input.files?.length) return;
     const file = input.files[0];
+    if (!ALLOWED_MIME_TYPES.has(file.type)) {
+      this.toastr.warning('Ce type de fichier n\'est pas autorisé.');
+      input.value = '';
+      return;
+    }
     if (file.size > 1_000_000_000) {
-      this.errorMessage = 'Le fichier ne doit pas dépasser 1 Go.';
+      this.toastr.warning('Le fichier ne doit pas dépasser 1 Go.');
       input.value = '';
       return;
     }
@@ -81,8 +90,12 @@ export class UploadComponent {
     this.isDragging = false;
     const file = event.dataTransfer?.files[0];
     if (!file) return;
+    if (!ALLOWED_MIME_TYPES.has(file.type)) {
+      this.toastr.warning('Ce type de fichier n\'est pas autorisé.');
+      return;
+    }
     if (file.size > 1_000_000_000) {
-      this.errorMessage = 'Le fichier ne doit pas dépasser 1 Go.';
+      this.toastr.warning('Le fichier ne doit pas dépasser 1 Go.');
       return;
     }
     this.errorMessage = '';

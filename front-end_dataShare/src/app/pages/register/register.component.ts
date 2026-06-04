@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../core/services/user.service';
 import { RegisterDTO } from '../../core/models/user.model';
 
@@ -19,12 +20,12 @@ function passwordMatchValidator(control: AbstractControl) {
 })
 export class RegisterComponent {
   registerForm: FormGroup;
-  errorMessage = '';
 
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {
     this.registerForm = this.fb.group(
       {
@@ -52,7 +53,7 @@ export class RegisterComponent {
     this.userService.register(registerDTO).subscribe({
       next: () => this.router.navigate(['/login']),
       error: (err) => {
-        this.errorMessage = err.error?.message || 'Une erreur est survenue. Veuillez réessayer.';
+        this.toastr.error(err.error?.message || 'Une erreur est survenue. Veuillez réessayer.');
       }
     });
   }

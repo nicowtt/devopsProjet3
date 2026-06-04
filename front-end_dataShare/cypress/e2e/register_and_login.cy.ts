@@ -30,7 +30,7 @@ describe('register and login', () => {
 
     // THEN
     cy.wait('@loginFailed');
-    cy.get('.server-error').should('contain', 'Email ou mot de passe incorrect.');
+    cy.get('.toast-error').should('contain', 'Email ou mot de passe incorrect.');
   });
 
   it('Login new cypress user', () => {

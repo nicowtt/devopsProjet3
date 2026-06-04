@@ -2,7 +2,7 @@
   <nav class="navbar">
     <a class="brand" routerLink="/home">DataShare</a>
     @if (isLoggedIn) {
-      <button class="btn-mySpace" routerLink="/mySpace">Mon espace</button>
+      <button class="btn-mySpace" routerLink="/space">Mon espace</button>
     } @else {
       <button class="btn-login" routerLink="/login">Se connecter</button>
     }
@@ -12,7 +12,7 @@
     <div class="card">
       <h1 class="card-title">Ajouter un fichier</h1>
 
-      <input #fileInput data-cy="file-input" type="file" class="file-input-hidden" (change)="onFileSelected($event)" />
+      <input #fileInput data-cy="file-input" type="file" class="file-input-hidden" [accept]="acceptFileType" (change)="onFileSelected($event)" />
 
       @if (!shareUrl) {
         @if (!selectedFile) {
@@ -26,7 +26,7 @@
           >
             <i class="fa-solid fa-cloud-arrow-up drop-icon"></i>
             <span class="drop-label">Glissez un fichier ici ou</span>
-            <button class="btn-add-file" type="button">Ajouter un fichier</button>
+            <button class="btn-add-file" type="button">Importer</button>
           </div>
         } @else {
           <div class="file-row">
@@ -71,7 +71,7 @@
           }
 
           <div class="actions">
-            <button class="btn-upload" data-cy="upload-btn" type="submit">
+            <button class="btn-upload" data-cy="upload-btn" type="submit" [disabled]="!selectedFile">
               <i class="fa-solid fa-cloud-arrow-up"></i>
               Téléverser
             </button>

@@ -4,24 +4,28 @@ import { FormsModule } from '@angular/forms';
 import { FileService } from '../../../core/services/file.service';
 import { FileResponseDTO } from '../../../core/models/file.model';
 import { AuthService } from '../../../core/services/auth.service';
+import { ToastrService } from 'ngx-toastr';
+import { LucideAngularModule } from 'lucide-angular';
+import { formatFileSize, daysRemaining, fileIconName } from '../../../shared/file.util';
 
 @Component({
   selector: 'app-download',
   standalone: true,
-  imports: [RouterLink, FormsModule],
+  imports: [RouterLink, FormsModule, LucideAngularModule],
   templateUrl: './download.component.html',
   styleUrl: './download.component.css'
 })
 export class DownloadComponent implements OnInit {
   fileResponseDTO: FileResponseDTO | null = null;
   password = '';
-  errorMessage = '';
+  fileNotFound = false;
   loading = true;
   isLoggedIn = false;
 
   constructor(
     private route: ActivatedRoute,
     private fileService: FileService,
+    private toastr: ToastrService,
     authService: AuthService
   ) {
     this.isLoggedIn = authService.isLoggedIn();
@@ -35,7 +39,7 @@ export class DownloadComponent implements OnInit {
         this.loading = false;
       },
       error: () => {
-        this.errorMessage = 'Fichier introuvable.';
+        this.fileNotFound = true;
         this.loading = false;
       }
     });
@@ -48,17 +52,21 @@ export class DownloadComponent implements OnInit {
 
   get daysRemaining(): number {
     if (!this.fileResponseDTO) return 0;
-    const diff = new Date(this.fileResponseDTO.expiredAt).getTime() - new Date().getTime();
-    return Math.ceil(diff / (1000 * 60 * 60 * 24));
+    return daysRemaining(this.fileResponseDTO.expiredAt);
   }
 
   get hasPassword(): boolean {
     return this.fileResponseDTO?.hasPassword ?? false;
   }
 
+  get iconName(): string {
+    return fileIconName(this.fileResponseDTO?.name ?? '');
+  }
+
   get fileSizeMo(): string {
-    if (!this.fileResponseDTO?.size) return '';
-    return (this.fileResponseDTO.size / 1_000_000).toFixed(1) + ' Mo';
+    const size = this.fileResponseDTO?.size;
+    if (!size) return '';
+    return formatFileSize(size);
   }
 
   onDownload(): void {
@@ -73,7 +81,7 @@ export class DownloadComponent implements OnInit {
         URL.revokeObjectURL(url);
       },
       error: () => {
-        this.errorMessage = 'Mot de passe incorrect ou fichier indisponible.';
+        this.toastr.error('Mot de passe incorrect ou fichier indisponible.');
       }
     });
   }

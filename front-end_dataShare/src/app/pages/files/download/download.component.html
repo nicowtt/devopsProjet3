@@ -2,7 +2,7 @@
   <nav class="navbar">
     <a class="brand" routerLink="/home">DataShare</a>
     @if (isLoggedIn) {
-      <button class="btn-mySpace" routerLink="/mySpace">Mon espace</button>
+      <button class="btn-mySpace" routerLink="/space">Mon espace</button>
     } @else {
       <button class="btn-login" routerLink="/login">Se connecter</button>
     }
@@ -14,10 +14,10 @@
 
       @if (loading) {
         <p class="loading">Chargement...</p>
-      } @else if (errorMessage && !fileResponseDTO) {
+      } @else if (fileNotFound) {
         <div class="banner banner--error">
           <i class="fa-solid fa-circle-info"></i>
-          {{ errorMessage }}
+          Ooup ! Ce fichier n'existe plus !
         </div>
       } @else if (isExpired) {
         <div class="banner banner--error">
@@ -26,7 +26,7 @@
         </div>
       } @else if (fileResponseDTO) {
         <div class="file-row">
-          <i class="fa-regular fa-file-image file-icon"></i>
+          <lucide-icon [name]="iconName" class="file-icon" [size]="32"></lucide-icon>
           <div class="file-info">
             <span class="file-name">{{ fileResponseDTO.name }}</span>
             <span class="file-size">{{ fileSizeMo }}</span>
@@ -56,10 +56,6 @@
               placeholder="Saisissez le mot de passe..."
             />
           </div>
-        }
-
-        @if (errorMessage) {
-          <p class="error-text">{{ errorMessage }}</p>
         }
 
         <button

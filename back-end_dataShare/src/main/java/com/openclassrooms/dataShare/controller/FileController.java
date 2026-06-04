@@ -17,6 +17,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.UUID;
 
 @Tag(name = "Fichiers", description = "Upload et gestion des fichiers")
@@ -31,7 +32,9 @@ public class FileController {
     @Operation(
         summary = "Upload d'un fichier",
         responses = {
-            @ApiResponse(responseCode = "201", description = "Fichier uploadé avec succès"),
+            @ApiResponse(responseCode = "201", description = "Fichier téléversé avec succès"),
+            @ApiResponse(responseCode = "413", description = "Fichier trop volumineux, maximum 1 Go"),
+            @ApiResponse(responseCode = "415", description = "Type de fichier non supporté"),
             @ApiResponse(responseCode = "503", description = "Le service est temporairement indisponible"),
         }
     )
@@ -41,13 +44,25 @@ public class FileController {
             @Valid @RequestPart("metadata") FileRequestDTO fileRequestDTO,
             @AuthenticationPrincipal User user
     ) {
-        FileResponseDTO saved = fileService.upload(
+        FileResponseDTO saved = fileService.uploadFile(
             file,
             fileDTOMapper.toEntity(fileRequestDTO),
             fileRequestDTO.getDayBeforeExpiration(),
             user
         );
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    }
+
+    @Operation(
+        summary = "Consultation des fichiers d'un utilisateur",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+        }
+    )
+    @GetMapping
+    public List<FileResponseDTO> getFiles(@AuthenticationPrincipal User user) {
+        return fileService.getFiles(user);
     }
 
     @Operation(
@@ -61,6 +76,6 @@ public class FileController {
     public FileResponseDTO getFile(
         @PathVariable UUID uuid
     ) {
-        return fileService.get(uuid);
+        return fileService.getFile(uuid);
     }
 }
