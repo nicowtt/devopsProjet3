@@ -119,7 +119,7 @@ class UserControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void test_login_successful_returns_200_with_token() throws Exception {
+    void test_login_successful_returns_ok() throws Exception {
         // GIVEN
         User user = new User();
         user.setEmail(EMAIL);

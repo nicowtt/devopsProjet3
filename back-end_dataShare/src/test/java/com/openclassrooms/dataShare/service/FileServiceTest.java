@@ -54,7 +54,7 @@ class FileServiceTest {
 
     // UPLOAD FILE
     @Test
-    void test_upload_File_compute_expired_at() throws IOException {
+    void test_upload_File() throws IOException {
         // GIVEN
         User owner = new User();
         File file = new File();

@@ -161,7 +161,7 @@ class FileControllerTest extends AbstractIntegrationTest {
             .andExpect(status().isServiceUnavailable());
     }
 
-    // GET FILES
+    // GET FILE
     @Test
     void test_get_file_returns_404_when_not_found() throws Exception {
         // GIVEN
