@@ -48,13 +48,18 @@
         @if (hasPassword) {
           <div class="form-group">
             <label for="password">Mot de passe</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              [(ngModel)]="password"
-              placeholder="Saisissez le mot de passe..."
-            />
+            <div class="input-password">
+              <input
+                id="password"
+                name="password"
+                [type]="showPassword ? 'text' : 'password'"
+                [(ngModel)]="password"
+                placeholder="Saisissez le mot de passe..."
+              />
+              <button type="button" class="btn-toggle-password" (click)="showPassword = !showPassword">
+                <lucide-icon [name]="showPassword ? 'eye-off' : 'eye'" [size]="18"></lucide-icon>
+              </button>
+            </div>
           </div>
         }
 

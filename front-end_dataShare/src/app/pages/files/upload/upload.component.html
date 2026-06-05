@@ -42,13 +42,18 @@
         <form #uploadForm="ngForm" (ngSubmit)="onSubmit()">
           <div class="form-group">
             <label for="password">Mot de passe</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              [(ngModel)]="password"
-              placeholder="Optionnel"
-            />
+            <div class="input-password">
+              <input
+                id="password"
+                name="password"
+                [type]="showPassword ? 'text' : 'password'"
+                [(ngModel)]="password"
+                placeholder="Optionnel"
+              />
+              <button type="button" class="btn-toggle-password" (click)="showPassword = !showPassword">
+                <lucide-icon [name]="showPassword ? 'eye-off' : 'eye'" [size]="18"></lucide-icon>
+              </button>
+            </div>
             @if (passwordError) {
               <span class="field-error">{{ passwordError }}</span>
             }

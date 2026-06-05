@@ -38,7 +38,10 @@ export class SpaceComponent implements OnInit {
         this.files = files;
         this.loading = false;
       },
-      error: () => this.loading = false
+      error: (err) => {
+        this.loading = false;
+        this.toastr.error(err.error?.message ?? 'Erreur lors du chargement des fichiers.');
+      }
     });
   }
 
@@ -105,6 +108,9 @@ export class SpaceComponent implements OnInit {
         this.openMenuUuid = null;
         this.confirmDeleteUuid = null;
         this.toastr.success('Le fichier a bien été supprimé.');
+      },
+      error: (err) => {
+        this.toastr.error(err.error?.message ?? 'Erreur lors de la suppression du fichier.');
       }
     });
   }

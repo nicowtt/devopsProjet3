@@ -18,6 +18,7 @@ import { formatFileSize, daysRemaining, fileIconName } from '../../../shared/fil
 export class DownloadComponent implements OnInit {
   fileResponseDTO: FileResponseDTO | null = null;
   password = '';
+  showPassword = false;
   fileNotFound = false;
   loading = true;
   isLoggedIn = false;
@@ -38,9 +39,10 @@ export class DownloadComponent implements OnInit {
         this.fileResponseDTO = fileResponseDTO;
         this.loading = false;
       },
-      error: () => {
+      error: (err) => {
         this.fileNotFound = true;
         this.loading = false;
+        this.toastr.error(err.error?.message ?? 'Fichier introuvable ou indisponible.');
       }
     });
   }
@@ -80,8 +82,15 @@ export class DownloadComponent implements OnInit {
         a.click();
         URL.revokeObjectURL(url);
       },
-      error: () => {
-        this.toastr.error('Mot de passe incorrect ou fichier indisponible.');
+      error: (err) => {
+        if (err.error instanceof Blob) {
+          err.error.text().then((text: string) => {
+            const message = JSON.parse(text)?.message ?? 'Erreur lors du téléchargement';
+            this.toastr.error(message);
+          });
+        } else {
+          this.toastr.error(err.error?.message ?? 'Erreur lors du téléchargement');
+        }
       }
     });
   }

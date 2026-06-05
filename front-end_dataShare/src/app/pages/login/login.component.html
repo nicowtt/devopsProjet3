@@ -28,13 +28,18 @@
 
         <div class="form-group">
           <label for="password">Mot de passe</label>
-          <input
-            id="password"
-            type="password"
-            formControlName="password"
-            placeholder="Saisissez votre mot de passe..."
-            [class.input-error]="password.invalid && password.touched"
-          />
+          <div class="input-password">
+            <input
+              id="password"
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="Saisissez votre mot de passe..."
+              [class.input-error]="password.invalid && password.touched"
+            />
+            <button type="button" class="btn-toggle-password" (click)="showPassword = !showPassword">
+              <lucide-icon [name]="showPassword ? 'eye-off' : 'eye'" [size]="18"></lucide-icon>
+            </button>
+          </div>
           @if (password.touched && password.hasError('required')) {
             <span class="error-text">Le mot de passe est requis</span>
           }

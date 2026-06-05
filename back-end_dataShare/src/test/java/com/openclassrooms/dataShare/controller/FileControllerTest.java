@@ -161,7 +161,7 @@ class FileControllerTest extends AbstractIntegrationTest {
             .andExpect(status().isServiceUnavailable());
     }
 
-    // DOWNLOAD FILES
+    // GET FILES
     @Test
     void test_get_file_returns_404_when_not_found() throws Exception {
         // GIVEN
@@ -171,6 +171,29 @@ class FileControllerTest extends AbstractIntegrationTest {
         mockMvc.perform(get(URL + "/" + uuid))
             .andDo(print())
             .andExpect(status().isNotFound());
+    }
+
+    // DOWNLOAD FILE
+    @Test
+    void test_download_file_returns_403_when_wrong_password() throws Exception {
+        // GIVEN
+        FileRequestDTO fileRequestDTO = new FileRequestDTO();
+        fileRequestDTO.setDayBeforeExpiration(7L);
+        fileRequestDTO.setPassword("password");
+
+        MockMultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "Hello".getBytes());
+        MockPart metadata = new MockPart("metadata", objectMapper.writeValueAsBytes(fileRequestDTO));
+        metadata.getHeaders().setContentType(APPLICATION_JSON);
+
+        String uploadResponse = mockMvc.perform(multipart(URL).file(file).part(metadata))
+            .andReturn().getResponse().getContentAsString();
+        String uuid = objectMapper.readTree(uploadResponse).get("uuid").asText();
+
+        // THEN
+        mockMvc.perform(get(URL + "/download/" + uuid)
+                .param("password", "wrongPassword"))
+            .andDo(print())
+            .andExpect(status().isForbidden());
     }
 
     // DELETE FILES

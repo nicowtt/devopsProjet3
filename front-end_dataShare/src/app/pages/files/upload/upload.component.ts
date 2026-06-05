@@ -24,6 +24,7 @@ export class UploadComponent {
   selectedFile: File | null = null;
   isDragging = false;
   password = '';
+  showPassword = false;
   expiration = 7;
   shareUrl: string | null = null;
   linkCopied = false;
@@ -127,7 +128,7 @@ export class UploadComponent {
         this.shareUrl = `${environment.baseUrl}/download/${fileResponseDTO.uuid}`;
       },
       error: (err) => {
-        this.errorMessage = err.error?.message || 'Une erreur est survenue lors du téléversement.';
+        this.toastr.error(err.error?.message ?? 'Une erreur est survenue lors du téléversement.');
       }
     });
   }

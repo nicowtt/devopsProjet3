@@ -72,17 +72,31 @@ public class FileController {
     }
 
     @Operation(
-        summary = "Téléchargement d'un fichier",
+        summary = "Affichage d'un fichier",
         responses = {
             @ApiResponse(responseCode = "200", description = "Ok"),
             @ApiResponse(responseCode = "404", description = "Introuvable")
         }
     )
     @GetMapping("/{uuid}")
-    public FileResponseDTO getFile(
-        @PathVariable UUID uuid
-    ) {
+    public FileResponseDTO getFile(@PathVariable UUID uuid) {
         return fileService.getFile(uuid);
+    }
+
+    @Operation(
+        summary = "Téléchargement d'un fichier",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Ok"),
+            @ApiResponse(responseCode = "403", description = "Mot de passe nécessaire ou mauvais mot de passe"),
+            @ApiResponse(responseCode = "404", description = "Introuvable")
+        }
+    )
+    @GetMapping("/download/{uuid}")
+    public FileResponseDTO downloadFile(
+        @PathVariable UUID uuid,
+        @RequestParam(value = "password", required = false) String password
+    ) {
+        return fileService.downloadFile(uuid, password);
     }
 
     // ---------------------------- DELETE ---------------

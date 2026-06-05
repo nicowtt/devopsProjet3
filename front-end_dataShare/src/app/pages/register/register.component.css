@@ -88,6 +88,34 @@
   outline: none;
   transition: border-color 0.2s;
   color: #1a1a1a;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input-password {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-password input {
+  padding-right: 44px;
+}
+
+.btn-toggle-password {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+}
+
+.btn-toggle-password:hover {
+  color: #1a1a1a;
 }
 
 .form-group input::placeholder {

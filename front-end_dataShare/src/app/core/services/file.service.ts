@@ -22,7 +22,7 @@ export class FileService {
 
   downloadFile(uuid: string, password?: string): Observable<Blob> {
     const params: Record<string, string> = password ? { password } : {};
-    return this.httpClient.get(`/api/files/${uuid}`, {
+    return this.httpClient.get(`/api/files/download/${uuid}`, {
       params,
       responseType: 'blob' as const
     }) as Observable<Blob>;

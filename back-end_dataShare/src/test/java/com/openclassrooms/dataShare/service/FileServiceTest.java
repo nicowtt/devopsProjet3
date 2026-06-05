@@ -14,6 +14,7 @@ import org.junit.jupiter.api.io.TempDir;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,12 +25,9 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import java.util.Optional;
 
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -42,6 +40,8 @@ class FileServiceTest {
     private FileRepository fileRepository;
     @Mock
     private FileDTOMapper fileDTOMapper;
+    @Mock
+    private PasswordEncoder passwordEncoder;
     @Mock
     private MultipartFile multipartFile;
     @InjectMocks
@@ -93,6 +93,27 @@ class FileServiceTest {
 
         // THEN
         assertThat(result.isHasPassword()).isFalse();
+    }
+
+    // DOWNLOAD FILE
+    @Test
+    void test_download_file_succeeds_when_correct_password() {
+        // GIVEN
+        UUID uuid = UUID.randomUUID();
+        File file = new File();
+        file.setUuid(uuid);
+        file.setPassword("password");
+        FileResponseDTO dto = new FileResponseDTO();
+
+        when(fileRepository.findByUuid(uuid)).thenReturn(Optional.of(file));
+        when(passwordEncoder.matches("password", "password")).thenReturn(true);
+        when(fileDTOMapper.toFileResponseDTO(file)).thenReturn(dto);
+
+        // WHEN
+        FileResponseDTO result = fileService.downloadFile(uuid, "password");
+
+        // THEN
+        assertThat(result).isEqualTo(dto);
     }
 
     // GET FILES

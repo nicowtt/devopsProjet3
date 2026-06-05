@@ -28,13 +28,18 @@
 
         <div class="form-group">
           <label for="password">Mot de passe</label>
-          <input
-            id="password"
-            type="password"
-            formControlName="password"
-            placeholder="Saisissez votre mot de passe..."
-            [class.input-error]="password.invalid && password.touched"
-          />
+          <div class="input-password">
+            <input
+              id="password"
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="Saisissez votre mot de passe..."
+              [class.input-error]="password.invalid && password.touched"
+            />
+            <button type="button" class="btn-toggle-password" (click)="showPassword = !showPassword">
+              <lucide-icon [name]="showPassword ? 'eye-off' : 'eye'" [size]="18"></lucide-icon>
+            </button>
+          </div>
           @if (password.touched && password.hasError('required')) {
             <span class="error-text">Le mot de passe est requis</span>
           } @else if (password.touched && password.hasError('minlength')) {
@@ -44,13 +49,18 @@
 
         <div class="form-group">
           <label for="confirmPassword">Verification du mot de passe</label>
-          <input
-            id="confirmPassword"
-            type="password"
-            formControlName="confirmPassword"
-            placeholder="Saisissez le à nouveau"
-            [class.input-error]="confirmPassword.touched && registerForm.hasError('passwordMismatch')"
-          />
+          <div class="input-password">
+            <input
+              id="confirmPassword"
+              [type]="showConfirmPassword ? 'text' : 'password'"
+              formControlName="confirmPassword"
+              placeholder="Saisissez le à nouveau"
+              [class.input-error]="confirmPassword.touched && registerForm.hasError('passwordMismatch')"
+            />
+            <button type="button" class="btn-toggle-password" (click)="showConfirmPassword = !showConfirmPassword">
+              <lucide-icon [name]="showConfirmPassword ? 'eye-off' : 'eye'" [size]="18"></lucide-icon>
+            </button>
+          </div>
           @if (confirmPassword.touched && registerForm.hasError('passwordMismatch')) {
             <span class="error-text">Les mots de passe ne correspondent pas</span>
           }

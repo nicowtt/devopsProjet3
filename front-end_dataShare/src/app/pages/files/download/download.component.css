@@ -147,6 +147,8 @@
   outline: none;
   color: #1a1a1a;
   transition: border-color 0.2s;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .form-group input:focus {
@@ -155,6 +157,32 @@
 
 .form-group input::placeholder {
   color: #9ca3af;
+}
+
+.input-password {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-password input {
+  padding-right: 44px;
+}
+
+.btn-toggle-password {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+}
+
+.btn-toggle-password:hover {
+  color: #1a1a1a;
 }
 
 .error-text {

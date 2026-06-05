@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -47,6 +49,7 @@ public class FileService {
 
     private final FileRepository fileRepository;
     private final FileDTOMapper fileDTOMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Value("${file.upload-dir}")
     private String uploadDir;
@@ -74,6 +77,10 @@ public class FileService {
         file.setMimeType(multipartFile.getContentType());
         file.setExpiredAt(this.computeExpiredAt(dayBeforeExpiration));
         file.setOwner(owner);
+        // encode password
+        if (file.getPassword() != null) {
+            file.setPassword(passwordEncoder.encode(file.getPassword()));
+        }
 
         File saved = fileRepository.save(file);
         log.info("File saved: uuid={}", saved.getUuid());
@@ -90,19 +97,35 @@ public class FileService {
     }
 
     public FileResponseDTO getFile(UUID fileUuid) {
-        // TODO check password match and encode/decode with Bcrypt
         File fileDb = fileRepository.findByUuid(fileUuid)
-            .orElseThrow(() -> new ResourceNotFoundException("Resource not found"));
+            .orElseThrow(() -> new ResourceNotFoundException("Introuvable"));
         return fileDTOMapper.toFileResponseDTO(fileDb);
+    }
 
+    public FileResponseDTO downloadFile(
+        UUID fileUuid,
+        String password
+    ) {
+        File fileDb = fileRepository.findByUuid(fileUuid)
+            .orElseThrow(() -> new ResourceNotFoundException("Introuvable"));
+        // check password
+        if (fileDb.getPassword() != null) {
+            if (password == null) {
+                throw new AccessDeniedException("Ce fichier nécessite un mot de passe");
+            }
+            if (!passwordEncoder.matches(password, fileDb.getPassword())) {
+                throw new AccessDeniedException("Mot de passe incorrect");
+            }
+        }
+        return fileDTOMapper.toFileResponseDTO(fileDb);
     }
 
     public void deleteFile(UUID fileUuid, User user) {
         File fileDb = fileRepository.findByUuid(fileUuid)
-            .orElseThrow(() -> new ResourceNotFoundException("Resource not found"));
+            .orElseThrow(() -> new ResourceNotFoundException("Introuvable"));
 
         if (!fileDb.getOwner().equals(user)) {
-            throw new AccessDeniedException("User can only delete his own files");
+            throw new AccessDeniedException("L'utilisateur peut uniquement effacer ses fichiers");
         }
 
         fileRepository.delete(fileDb);

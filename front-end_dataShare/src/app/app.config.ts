@@ -1,6 +1,6 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { LUCIDE_ICONS, LucideIconProvider, Lock, CloudUpload, File, FileImage, FileMusic, FilePlay } from 'lucide-angular';
+import { LUCIDE_ICONS, LucideIconProvider, Lock, CloudUpload, File, FileImage, FileMusic, FilePlay, Eye, EyeOff } from 'lucide-angular';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
 
@@ -15,6 +15,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAnimations(),
     provideToastr({ timeOut: 3000, positionClass: 'toast-top-center', preventDuplicates: true }),
-    { provide: LUCIDE_ICONS, useValue: new LucideIconProvider({ Lock, CloudUpload, File, FileImage, FileMusic, FilePlay }), multi: true },
+    { provide: LUCIDE_ICONS, useValue: new LucideIconProvider({ Lock, CloudUpload, File, FileImage, FileMusic, FilePlay, Eye, EyeOff }), multi: true },
   ]
 };
