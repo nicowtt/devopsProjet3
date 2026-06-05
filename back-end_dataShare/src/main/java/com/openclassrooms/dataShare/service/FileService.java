@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -130,6 +129,15 @@ public class FileService {
 
         fileRepository.delete(fileDb);
         log.info("File removed: uuid={}", fileDb.getUuid());
+    }
+
+    public void deleteExpiredFiles() {
+        List<File> fileToRemove = fileRepository.findAllByExpiredAtBefore(LocalDateTime.now());
+
+        for (File file : fileToRemove) {
+            fileRepository.delete(file);
+        }
+        log.info("Cron has deleted {} expired files.", fileToRemove.size());
     }
 
     // -------------------------- private methods -----------------------------
