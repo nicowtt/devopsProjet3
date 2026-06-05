@@ -4,12 +4,13 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/spec",
-    "types": [
-      "jest"
-    ]
+    "types": ["jest"],
+    "composite": true
   },
   "include": [
-    "src/**/*.spec.ts",
-    "src/**/*.d.ts"
-  ]
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "setup-jest.ts"
+  ],
+  "exclude": ["cypress"]
 }

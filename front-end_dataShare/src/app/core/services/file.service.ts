@@ -31,4 +31,8 @@ export class FileService {
   getFiles(): Observable<FileResponseDTO[]> {
     return this.httpClient.get<FileResponseDTO[]>('/api/files');
   }
+
+  deleteFile(uuid: string): Observable<void> {
+    return this.httpClient.delete<void>(`/api/files/${uuid}`);
+  }
 }

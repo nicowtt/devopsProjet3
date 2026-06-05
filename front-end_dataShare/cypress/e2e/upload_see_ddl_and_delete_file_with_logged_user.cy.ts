@@ -65,4 +65,32 @@ describe('Upload and download file', () => {
     // THEN
     cy.wait('@download');
   });
+
+  it('Delete a file from space', () => {
+    // GIVEN
+    const mockFiles = [
+      {
+        uuid: fileUuid,
+        name: 'test-file.txt',
+        size: 1_500_000,
+        createdAt: new Date().toISOString(),
+        expiredAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        hasPassword: false,
+      }
+    ];
+    cy.intercept('GET', '/api/files', { statusCode: 200, body: mockFiles }).as('getFiles');
+    cy.intercept('DELETE', `/api/files/${fileUuid}`, { statusCode: 204 }).as('deleteFile');
+    cy.window().then(win => win.localStorage.setItem('jwt_token', TOKEN));
+    cy.visit('/space');
+    cy.wait('@getFiles');
+
+    // WHEN twice is for confirmation
+    cy.get('.btn-delete').click();
+    cy.get('.btn-delete').click();
+
+    // THEN
+    cy.wait('@deleteFile');
+    cy.get('.file-name').should('not.exist');
+  });
+
 });

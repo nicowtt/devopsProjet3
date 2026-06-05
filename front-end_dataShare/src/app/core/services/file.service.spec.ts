@@ -3,7 +3,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 
 import { FileService } from './file.service';
-import { FileDTO, FileResponseDTO } from '../models/file.model';
+import { FileRequestDTO, FileResponseDTO } from '../models/file.model';
 
 describe('FileService', () => {
   let service: FileService;
@@ -53,8 +53,8 @@ describe('FileService', () => {
     it('must send POST request to /api/files with file and metadata', () => {
       // GIVEN
       const file = new File(['content'], 'test.txt', { type: 'text/plain' });
-      const fileDTO: FileDTO = { name: 'test.txt', dayBeforeExpiration: 7 };
-      const mockResponse: FileDTO = { uuid: 'abc-123', name: 'test.txt', dayBeforeExpiration: 7 };
+      const fileDTO: FileRequestDTO = { dayBeforeExpiration: 7 };
+      const mockResponse: FileResponseDTO = { uuid: 'uuid', name: 'test.txt', createdAt: '2024-01-01', expiredAt: '2099-01-01' };
 
       // WHEN
       service.upload(file, fileDTO).subscribe();

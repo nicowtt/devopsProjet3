@@ -19,10 +19,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 #toast-container > .ngx-toastr {
   border-radius: 16px !important;
   padding: 14px 48px 14px 52px !important;
-  min-width: 300px;
+  width: max-content !important;
+  min-width: 200px;
   max-width: 480px;
-  width: max-content;
-  white-space: normal;
+  white-space: nowrap;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12) !important;
 }
 

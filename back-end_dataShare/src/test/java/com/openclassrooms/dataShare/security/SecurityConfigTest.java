@@ -10,7 +10,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.util.UUID;
+
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,8 +36,18 @@ class SecurityConfigTest extends AbstractIntegrationTest {
 
     // AUTHENTICATED ROUTE TEST
     @Test
-    void test_route_returns_401_when_not_authorized() throws Exception {
+    void test_get_files_route_returns_401_when_not_authorized() throws Exception {
         mockMvc.perform(get("/api/files"))
+            .andDo(print())
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void test_delete_file_route_returns_401_when_not_authorized() throws Exception {
+        // GIVEN
+        UUID uuid = UUID.randomUUID();
+
+        mockMvc.perform(delete("/api/files/" + uuid))
             .andDo(print())
             .andExpect(status().isUnauthorized());
     }

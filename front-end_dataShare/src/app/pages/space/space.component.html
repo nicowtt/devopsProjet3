@@ -45,6 +45,13 @@
         <button class="filter-btn" [class.filter-btn--active]="filter === 'expire'" (click)="setFilter('expire')">Expiré</button>
       </div>
 
+      @if (loading) {
+        <div class="loading">
+          <div class="spinner"></div>
+          <span>Chargement des fichiers...</span>
+        </div>
+      }
+
       <div class="file-list">
         @for (file of filteredFiles; track file.uuid) {
           <div class="file-row">
@@ -65,26 +72,44 @@
               <lucide-icon name="lock" class="lock-icon" [size]="16"></lucide-icon>
             }
 
-            @if (!isExpired(file)) {
-              <div class="file-actions desktop-actions">
+          @if (!isExpired(file)) {
+            <div class="file-actions desktop-actions" (click)="$event.stopPropagation()">
+              @if (confirmDeleteUuid === file.uuid) {
+                <span class="confirm-label">Supprimer définitivement ?</span>
+                <button class="btn-delete" (click)="deleteFile(file.uuid!)">
+                  <i class="fa-regular fa-trash-can"></i> Confirmer
+                </button>
+                <button class="btn-cancel" (click)="cancelDelete()">Annuler</button>
+              } @else {
                 <button class="btn-access" (click)="navigateToFile(file.uuid!)">
                   Accéder <i class="fa-solid fa-arrow-right"></i>
                 </button>
-              </div>
-
-              <div class="file-actions mobile-actions">
-                <button class="btn-dots" (click)="toggleMenu(file.uuid!)">
-                  <i class="fa-solid fa-ellipsis-vertical"></i>
+                <button class="btn-delete" (click)="requestDelete(file.uuid!)">
+                  <i class="fa-regular fa-trash-can"></i> Supprimer
                 </button>
-                @if (openMenuUuid === file.uuid) {
-                  <div class="dropdown">
+              }
+            </div>
+
+            <div class="file-actions mobile-actions">
+              <button class="btn-dots" (click)="toggleMenu(file.uuid!, $event)">
+                <i class="fa-solid fa-ellipsis-vertical"></i>
+              </button>
+              @if (openMenuUuid === file.uuid) {
+                <div class="dropdown" (click)="$event.stopPropagation()">
+                  @if (confirmDeleteUuid === file.uuid) {
+                    <span class="dropdown-confirm-label">Supprimer définitivement ?</span>
+                    <button (click)="cancelDelete()">Annuler</button>
+                    <button class="dropdown-btn-danger" (click)="deleteFile(file.uuid!)">Confirmer</button>
+                  } @else {
                     <button (click)="navigateToFile(file.uuid!)">Accéder</button>
-                  </div>
-                }
-              </div>
-            } @else {
-              <span class="expired-msg">Ce fichier a expiré, il n'est plus stocké chez nous</span>
-            }
+                    <button (click)="requestDelete(file.uuid!)">Supprimer</button>
+                  }
+                </div>
+              }
+            </div>
+          } @else {
+            <span class="expired-msg">Ce fichier a expiré, il n'est plus stocké chez nous.</span>
+          }
           </div>
         }
       </div>

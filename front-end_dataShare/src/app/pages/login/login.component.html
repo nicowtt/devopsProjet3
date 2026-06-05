@@ -16,11 +16,12 @@
             type="email"
             formControlName="email"
             placeholder="Saisissez votre email..."
-            [class.input-error]="email?.invalid && email?.touched"
+            (input)="onEmailInput($event)"
+            [class.input-error]="email.invalid && email.touched"
           />
-          @if (email?.touched && email?.hasError('required')) {
+          @if (email.touched && email.hasError('required')) {
             <span class="error-text">L'email est requis</span>
-          } @else if (email?.touched && email?.hasError('email')) {
+          } @else if (email.touched && email.hasError('email')) {
             <span class="error-text">Format d'email invalide</span>
           }
         </div>
@@ -32,9 +33,9 @@
             type="password"
             formControlName="password"
             placeholder="Saisissez votre mot de passe..."
-            [class.input-error]="password?.invalid && password?.touched"
+            [class.input-error]="password.invalid && password.touched"
           />
-          @if (password?.touched && password?.hasError('required')) {
+          @if (password.touched && password.hasError('required')) {
             <span class="error-text">Le mot de passe est requis</span>
           }
         </div>

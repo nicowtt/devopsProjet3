@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
@@ -19,9 +19,11 @@ type Filter = 'tous' | 'actifs' | 'expire';
 })
 export class SpaceComponent implements OnInit {
   files: FileResponseDTO[] = [];
+  loading = true;
   filter: Filter = 'tous';
   sidebarOpen = false;
   openMenuUuid: string | null = null;
+  confirmDeleteUuid: string | null = null;
 
   constructor(
     private fileService: FileService,
@@ -32,7 +34,11 @@ export class SpaceComponent implements OnInit {
 
   ngOnInit(): void {
     this.fileService.getFiles().subscribe({
-      next: files => this.files = files
+      next: files => {
+        this.files = files;
+        this.loading = false;
+      },
+      error: () => this.loading = false
     });
   }
 
@@ -54,8 +60,24 @@ export class SpaceComponent implements OnInit {
     this.filter = f;
   }
 
-  toggleMenu(uuid: string): void {
+  @HostListener('document:click')
+  closeMenu(): void {
+    this.openMenuUuid = null;
+    this.confirmDeleteUuid = null;
+  }
+
+  toggleMenu(uuid: string, event: MouseEvent): void {
+    event.stopPropagation();
     this.openMenuUuid = this.openMenuUuid === uuid ? null : uuid;
+    this.confirmDeleteUuid = null;
+  }
+
+  requestDelete(uuid: string): void {
+    this.confirmDeleteUuid = uuid;
+  }
+
+  cancelDelete(): void {
+    this.confirmDeleteUuid = null;
   }
 
   fileIconName(file: FileResponseDTO): string {
@@ -74,5 +96,16 @@ export class SpaceComponent implements OnInit {
     this.authService.removeToken();
     this.toastr.info('Vous avez été déconnecté.');
     this.router.navigate(['/login']);
+  }
+
+  deleteFile(uuid: string): void {
+    this.fileService.deleteFile(uuid).subscribe({
+      next: () => {
+        this.files = this.files.filter(f => f.uuid !== uuid);
+        this.openMenuUuid = null;
+        this.confirmDeleteUuid = null;
+        this.toastr.success('Le fichier a bien été supprimé.');
+      }
+    });
   }
 }

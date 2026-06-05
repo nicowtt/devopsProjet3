@@ -13,6 +13,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -88,14 +89,24 @@ public class FileService {
             .toList();
     }
 
-    public FileResponseDTO getFile(
-        UUID fileUuid
-    ) {
+    public FileResponseDTO getFile(UUID fileUuid) {
         // TODO check password match and encode/decode with Bcrypt
         File fileDb = fileRepository.findByUuid(fileUuid)
             .orElseThrow(() -> new ResourceNotFoundException("Resource not found"));
         return fileDTOMapper.toFileResponseDTO(fileDb);
 
+    }
+
+    public void deleteFile(UUID fileUuid, User user) {
+        File fileDb = fileRepository.findByUuid(fileUuid)
+            .orElseThrow(() -> new ResourceNotFoundException("Resource not found"));
+
+        if (!fileDb.getOwner().equals(user)) {
+            throw new AccessDeniedException("User can only delete his own files");
+        }
+
+        fileRepository.delete(fileDb);
+        log.info("File removed: uuid={}", fileDb.getUuid());
     }
 
     // -------------------------- private methods -----------------------------

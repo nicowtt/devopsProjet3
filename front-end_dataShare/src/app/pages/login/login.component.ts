@@ -29,8 +29,13 @@ export class LoginComponent {
     });
   }
 
-  get email() { return this.loginForm.get('email'); }
-  get password() { return this.loginForm.get('password'); }
+  get email() { return this.loginForm.get('email')!; }
+  get password() { return this.loginForm.get('password')!; }
+
+  onEmailInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.email.setValue(input.value.toLowerCase(), { emitEvent: false });
+  }
 
   onSubmit(): void {
     if (this.loginForm.invalid) {
@@ -38,8 +43,8 @@ export class LoginComponent {
       return;
     }
     const loginDTO: LoginDTO = {
-      email: this.loginForm.get('email')?.value,
-      password: this.loginForm.get('password')?.value
+      email: this.email.value,
+      password: this.password.value
     };
     this.userService.login(loginDTO).subscribe({
       next: (token) => {

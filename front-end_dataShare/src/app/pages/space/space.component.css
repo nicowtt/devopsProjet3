@@ -178,6 +178,30 @@
   background: rgba(201, 98, 69, 0.1);
 }
 
+/* ── Loading ── */
+.loading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 40px 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ece4de;
+  border-top-color: #c96245;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 /* ── File list ── */
 .file-list {
   display: flex;
@@ -235,6 +259,58 @@
   align-items: center;
   gap: 10px;
   flex-shrink: 0;
+}
+
+.btn-delete {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid #c96245;
+  color: #c96245;
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 0.85rem;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.btn-delete:hover {
+  background: #fdf0e8;
+}
+
+.btn-cancel {
+  display: inline-flex;
+  align-items: center;
+  background: transparent;
+  border: 1px solid #d1d5db;
+  color: #6b7280;
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 0.85rem;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.btn-cancel:hover {
+  background: #f3f4f6;
+}
+
+.confirm-label {
+  font-size: 0.85rem;
+  color: #1a1a1a;
+  white-space: nowrap;
+}
+
+.dropdown-confirm-label {
+  display: block;
+  padding: 10px 16px 4px;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.dropdown-btn-danger {
+  color: #c96245 !important;
 }
 
 .btn-access {

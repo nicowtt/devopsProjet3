@@ -7,6 +7,7 @@ import com.openclassrooms.dataShare.mapper.FileDTOMapper;
 import com.openclassrooms.dataShare.service.FileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,8 @@ public class FileController {
     private final FileService fileService;
     private final FileDTOMapper fileDTOMapper;
 
+
+    // ---------------------------- WRITE ---------------
     @Operation(
         summary = "Upload d'un fichier",
         responses = {
@@ -53,11 +56,14 @@ public class FileController {
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
+
+    // ---------------------------- READ ---------------
     @Operation(
         summary = "Consultation des fichiers d'un utilisateur",
+        security = @SecurityRequirement(name = "bearerAuth"),
         responses = {
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized")
+            @ApiResponse(responseCode = "200", description = "Ok"),
+            @ApiResponse(responseCode = "401", description = "Non autorisé")
         }
     )
     @GetMapping
@@ -68,8 +74,8 @@ public class FileController {
     @Operation(
         summary = "Téléchargement d'un fichier",
         responses = {
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "404", description = "Not Found")
+            @ApiResponse(responseCode = "200", description = "Ok"),
+            @ApiResponse(responseCode = "404", description = "Introuvable")
         }
     )
     @GetMapping("/{uuid}")
@@ -77,5 +83,25 @@ public class FileController {
         @PathVariable UUID uuid
     ) {
         return fileService.getFile(uuid);
+    }
+
+    // ---------------------------- DELETE ---------------
+    @Operation(
+        summary = "Suppression d'un fichier",
+        security = @SecurityRequirement(name = "bearerAuth"),
+        responses = {
+            @ApiResponse(responseCode = "204", description = "Ok"),
+            @ApiResponse(responseCode = "401", description = "Non autorisé"),
+            @ApiResponse(responseCode = "403", description = "Un utilisateur peut uniquement supprimer ses fichiers"),
+            @ApiResponse(responseCode = "404", description = "Introuvable")
+        }
+    )
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<Void> deleteFile(
+        @PathVariable UUID uuid,
+        @AuthenticationPrincipal User user
+    ) {
+        fileService.deleteFile(uuid, user);
+        return ResponseEntity.noContent().build();
     }
 }

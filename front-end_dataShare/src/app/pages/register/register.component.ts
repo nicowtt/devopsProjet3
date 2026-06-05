@@ -37,9 +37,14 @@ export class RegisterComponent {
     );
   }
 
-  get email() { return this.registerForm.get('email'); }
-  get password() { return this.registerForm.get('password'); }
-  get confirmPassword() { return this.registerForm.get('confirmPassword'); }
+  get email() { return this.registerForm.get('email')!; }
+  get password() { return this.registerForm.get('password')!; }
+  get confirmPassword() { return this.registerForm.get('confirmPassword')!; }
+
+  onEmailInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.email.setValue(input.value.toLowerCase(), { emitEvent: false });
+  }
 
   onSubmit(): void {
     if (this.registerForm.invalid) {
@@ -47,8 +52,8 @@ export class RegisterComponent {
       return;
     }
     const registerDTO: RegisterDTO = {
-      email: this.registerForm.get('email')?.value,
-      password: this.registerForm.get('password')?.value
+      email: this.email.value,
+      password: this.password.value
     };
     this.userService.register(registerDTO).subscribe({
       next: () => this.router.navigate(['/login']),

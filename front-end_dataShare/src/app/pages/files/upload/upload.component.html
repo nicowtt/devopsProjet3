@@ -30,7 +30,7 @@
           </div>
         } @else {
           <div class="file-row">
-            <i class="fa-regular fa-file-image file-icon"></i>
+            <lucide-icon [name]="fileIcon" class="file-icon" [size]="18"></lucide-icon>
             <div class="file-info">
               <span class="file-name">{{ truncatedName }}</span>
               <span class="file-size">{{ fileSizeMo }}</span>
@@ -80,7 +80,7 @@
 
       } @else {
         <div class="file-row">
-          <i class="fa-regular fa-file-image file-icon"></i>
+          <lucide-icon [name]="fileIcon" class="file-icon" [size]="18"></lucide-icon>
           <div class="file-info">
             <span class="file-name">{{ selectedFile?.name }}</span>
             <span class="file-size">{{ fileSizeMo }}</span>

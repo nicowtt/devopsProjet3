@@ -1,8 +1,9 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { LucideAngularModule } from 'lucide-angular';
 import { ToastrService } from 'ngx-toastr';
-import { formatFileSize, ALLOWED_MIME_TYPES, ACCEPT_FILE_TYPE } from '../../../shared/file.util';
+import { formatFileSize, fileIconName, ALLOWED_MIME_TYPES, ACCEPT_FILE_TYPE } from '../../../shared/file.util';
 import { FileService } from '../../../core/services/file.service';
 import { FileRequestDTO, FileResponseDTO } from '../../../core/models/file.model';
 import { AuthService } from '../../../core/services/auth.service';
@@ -11,7 +12,7 @@ import { environment } from '../../../../environments/environment';
 @Component({
   selector: 'app-upload',
   standalone: true,
-  imports: [RouterLink, FormsModule],
+  imports: [RouterLink, FormsModule, LucideAngularModule],
   templateUrl: './upload.component.html',
   styleUrl: './upload.component.css'
 })
@@ -50,6 +51,10 @@ export class UploadComponent {
 
   get expirationMessage(): string {
     return this.expiration === 1 ? '1 jour' : `${this.expiration} jours`;
+  }
+
+  get fileIcon(): string {
+    return this.selectedFile ? fileIconName(this.selectedFile.name) : 'file';
   }
 
   onFileSelected(event: Event): void {
