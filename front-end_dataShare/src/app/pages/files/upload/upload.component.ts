@@ -128,7 +128,8 @@ export class UploadComponent {
         this.shareUrl = `${environment.baseUrl}/download/${fileResponseDTO.uuid}`;
       },
       error: (err) => {
-        this.toastr.error(err.error?.message ?? 'Une erreur est survenue lors du téléversement.');
+        this.errorMessage = err.error?.message ?? 'Une erreur est survenue lors du téléversement.';
+        this.toastr.error(this.errorMessage);
       }
     });
   }

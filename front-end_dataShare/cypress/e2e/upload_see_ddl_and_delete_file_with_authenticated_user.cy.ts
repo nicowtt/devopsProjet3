@@ -51,8 +51,8 @@ describe('Upload and download file', () => {
       hasPassword: false
     };
 
-    cy.intercept('GET', `/api/files/${fileUuid}`, { statusCode: 200, body: 'file content' }).as('download');
-    cy.intercept({ method: 'GET', url: `/api/files/${fileUuid}`, times: 1 }, mockFile).as('getFile');
+    cy.intercept('GET', `/api/files/${fileUuid}`, mockFile).as('getFile');
+    cy.intercept('GET', `/api/files/download/${fileUuid}`, { statusCode: 200, body: 'file content' }).as('download');
     cy.window().then(win => win.localStorage.setItem('jwt_token', TOKEN));
 
     cy.visit(`/download/${fileUuid}`);

@@ -55,8 +55,6 @@ Les tests d'intégration utilisent Testcontainers, qui lance automatiquement une
 | DELETE /api/files/{uuid}       | DELETE   | Un utilisateur essaye d'effacer un fichier qui ne lui appartient pas → 403 (FORBIDDEN) |
 | DELETE /api/files/{uuid}       | DELETE   | Uuid du fichier inconnu → 404 (NOT_FOUND)                                              |
 
----
-
 ### 3.Tests unitaire - Front-end (ANGULAR)
 
 **Framework de test unitaire JavaScript:** Jest
@@ -164,3 +162,52 @@ upload_see_ddl_and_delete_file_with_authenticated_user.cy.ts
 2. Affichage du fichier dans son espace.
 3. Téléchargement du fichier.
 4. Effacement du fichier.
+
+
+
+### 5. Lancement des tests Back-end :
+
+Ouvrir un terminal dans le dossier du Back-end :
+
+`mvn clean test` -> Nettoyage et lancement des tests
+
+
+
+=> ouverture de la page .html du rapport Jacoco dans le dossier du Back-end:
+
+*.../target/site/jacoco/index.html*
+
+
+
+### 6. Lancement des tests unitaire Front-end :
+
+Ouvrir un terminal dans le dossier du Front-end :
+
+`npm test`
+
+La couverture des tests s'affiche.
+
+### 7. Lancement des tests fonctionnels (e2e) Front-end :
+
+## 7.1 Avec interface :
+
+Ouvrir un terminal dans le dossier du Front-end :
+
+`npx cypress open`
+
+
+
+## 7.2 Lancer la couverture des tests fonctionnels (e2e) Front-end
+
+Ouvrir un terminal dans le dossier du Front-end :
+
+1. Lancement du server en mode instrumenté : 
+   `ng run front-end_dataShare:serve-coverage`
+
+2. Lancement de chaque scénario : 
+   `npx cypress run --spec "cypress/e2e/register_and_login.cy.ts"`
+   `npx cypress run --spec "cypress/e2e/upload_see_ddl_and_delete_file_with_authenticated_user.cy.ts"`
+
+3. Lancement et affichage du rapport de test: 
+
+    `npx nyc report --reporter=text-summary`

@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { provideToastr } from 'ngx-toastr';
-import { LUCIDE_ICONS, LucideIconProvider, File as FileIcon, FileImage, FileMusic, FilePlay, Lock } from 'lucide-angular';
+import { LUCIDE_ICONS, LucideIconProvider, File as FileIcon, FileImage, FileMusic, FilePlay, Lock, Eye, EyeOff } from 'lucide-angular';
 
 import { DownloadComponent } from './download.component';
 import { FileService } from '../../../core/services/file.service';
@@ -33,7 +33,7 @@ describe('DownloadComponent', () => {
       imports: [DownloadComponent],
       providers: [
         provideToastr(),
-        { provide: LUCIDE_ICONS, useValue: new LucideIconProvider({ File: FileIcon, FileImage, FileMusic, FilePlay, Lock }), multi: true },
+        { provide: LUCIDE_ICONS, useValue: new LucideIconProvider({ File: FileIcon, FileImage, FileMusic, FilePlay, Lock, Eye, EyeOff }), multi: true },
         { provide: FileService, useValue: fileServiceMock },
         { provide: AuthService, useValue: { isLoggedIn: () => false } },
         { provide: ActivatedRoute, useValue: { snapshot: { paramMap: { get: () => 'abc-123' } } } },

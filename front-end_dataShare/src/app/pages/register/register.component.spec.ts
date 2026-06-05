@@ -3,6 +3,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { provideRouter, Router } from '@angular/router';
 import { provideToastr } from 'ngx-toastr';
+import { LUCIDE_ICONS, LucideIconProvider, Eye, EyeOff } from 'lucide-angular';
 
 import { RegisterComponent } from './register.component';
 
@@ -20,6 +21,7 @@ describe('RegisterComponent', () => {
         provideHttpClientTesting(),
         provideRouter([]),
         provideToastr(),
+        { provide: LUCIDE_ICONS, useValue: new LucideIconProvider({ Eye, EyeOff }), multi: true },
       ]
     }).compileComponents();
 
