@@ -3,7 +3,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { provideToastr, ToastrService } from 'ngx-toastr';
-import { LUCIDE_ICONS, LucideIconProvider, Eye, EyeOff, File as FileIcon, FileImage, FileMusic, FilePlay } from 'lucide-angular';
+import { LUCIDE_ICONS, LucideIconProvider, Eye, EyeOff, File as FileIcon, FileImage, FileMusic, FilePlay, CloudUpload, Copy } from 'lucide-angular';
 
 import { UploadComponent } from './upload.component';
 
@@ -20,7 +20,7 @@ describe('UploadComponent', () => {
         provideHttpClientTesting(),
         provideRouter([]),
         provideToastr(),
-        { provide: LUCIDE_ICONS, useValue: new LucideIconProvider({ Eye, EyeOff, File: FileIcon, FileImage, FileMusic, FilePlay }), multi: true },
+        { provide: LUCIDE_ICONS, useValue: new LucideIconProvider({ Eye, EyeOff, File: FileIcon, FileImage, FileMusic, FilePlay, CloudUpload, Copy }), multi: true },
       ]
     }).compileComponents();
 

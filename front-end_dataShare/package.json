@@ -5,11 +5,14 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:analyze": "ng build --source-map",
+    "analyze": "source-map-explorer 'dist/front-end-data-share/browser/*.js' --html bundle-report.html",
     "watch": "ng build --watch --configuration development",
     "test": "NODE_OPTIONS=--no-deprecation jest --coverage",
     "test:coverage": "NODE_OPTIONS=--no-deprecation jest --coverage",
     "e2e": "cypress open",
-    "e2e:run": "cypress run"
+    "e2e:run": "cypress run",
+    "lhci": "lhci autorun"
   },
   "private": true,
   "dependencies": {
@@ -21,7 +24,6 @@
     "@angular/platform-browser": "^19.2.0",
     "@angular/platform-browser-dynamic": "^19.2.0",
     "@angular/router": "^19.2.0",
-    "@fortawesome/fontawesome-free": "^7.2.0",
     "lucide-angular": "^1.0.0",
     "ngx-toastr": "^19.1.0",
     "rxjs": "~7.8.0",
@@ -36,6 +38,7 @@
     "@angular/compiler-cli": "^19.2.0",
     "@babel/core": "^7.29.7",
     "@cypress/code-coverage": "^4.0.3",
+    "@lhci/cli": "^0.15.1",
     "@types/jest": "^30.0.0",
     "babel-loader": "^10.1.1",
     "babel-plugin-istanbul": "^8.0.0",
@@ -45,6 +48,7 @@
     "jest-environment-jsdom": "^29.7.0",
     "jest-preset-angular": "^14.6.2",
     "nyc": "^18.0.0",
+    "source-map-explorer": "^2.5.3",
     "typescript": "~5.7.2"
   }
 }

@@ -10,7 +10,7 @@
     <div class="sidebar-header">
       <a class="brand" routerLink="/home">DataShare</a>
       <button class="btn-close" (click)="sidebarOpen = false">
-        <i class="fa-solid fa-xmark"></i>
+        <lucide-icon name="x" [size]="20"></lucide-icon>
       </button>
     </div>
     <nav class="sidebar-nav">
@@ -25,12 +25,12 @@
   <div class="main">
     <div class="topbar">
       <button class="btn-hamburger" (click)="sidebarOpen = true">
-        <i class="fa-solid fa-bars"></i>
+        <lucide-icon name="menu" [size]="20"></lucide-icon>
       </button>
       <div class="topbar-actions">
         <button class="btn-add" routerLink="/upload">Ajouter des fichiers</button>
         <button class="btn-logout" (click)="logout()">
-          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <lucide-icon name="log-out" [size]="16"></lucide-icon>
           Déconnexion
         </button>
       </div>
@@ -77,22 +77,22 @@
               @if (confirmDeleteUuid === file.uuid) {
                 <span class="confirm-label">Supprimer définitivement ?</span>
                 <button class="btn-delete" (click)="deleteFile(file.uuid!)">
-                  <i class="fa-regular fa-trash-can"></i> Confirmer
+                  <lucide-icon name="trash" [size]="14"></lucide-icon> Confirmer
                 </button>
                 <button class="btn-cancel" (click)="cancelDelete()">Annuler</button>
               } @else {
                 <button class="btn-access" (click)="navigateToFile(file.uuid!)">
-                  Accéder <i class="fa-solid fa-arrow-right"></i>
+                  Accéder <lucide-icon name="arrow-right" [size]="14"></lucide-icon>
                 </button>
                 <button class="btn-delete" (click)="requestDelete(file.uuid!)">
-                  <i class="fa-regular fa-trash-can"></i> Supprimer
+                  <lucide-icon name="trash" [size]="14"></lucide-icon> Supprimer
                 </button>
               }
             </div>
 
             <div class="file-actions mobile-actions">
               <button class="btn-dots" (click)="toggleMenu(file.uuid!, $event)">
-                <i class="fa-solid fa-ellipsis-vertical"></i>
+                <lucide-icon name="ellipsis-vertical" [size]="18"></lucide-icon>
               </button>
               @if (openMenuUuid === file.uuid) {
                 <div class="dropdown" (click)="$event.stopPropagation()">

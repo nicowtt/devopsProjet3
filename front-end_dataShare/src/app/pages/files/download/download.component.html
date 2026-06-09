@@ -16,12 +16,12 @@
         <p class="loading">Chargement...</p>
       } @else if (fileNotFound) {
         <div class="banner banner--error">
-          <i class="fa-solid fa-circle-info"></i>
+          <lucide-icon name="info" [size]="16"></lucide-icon>
           Ooup ! Ce fichier n'existe plus !
         </div>
       } @else if (isExpired) {
         <div class="banner banner--error">
-          <i class="fa-solid fa-circle-info"></i>
+          <lucide-icon name="info" [size]="16"></lucide-icon>
           Ce fichier n'est plus disponible en téléchargement car il a expiré.
         </div>
       } @else if (fileResponseDTO) {
@@ -35,12 +35,12 @@
 
         @if (daysRemaining === 1) {
           <div class="banner banner--warning">
-            <i class="fa-solid fa-triangle-exclamation"></i>
+            <lucide-icon name="triangle-alert" [size]="16"></lucide-icon>
             Ce fichier expirera demain.
           </div>
         } @else {
           <div class="banner banner--info">
-            <i class="fa-solid fa-circle-info"></i>
+            <lucide-icon name="info" [size]="16"></lucide-icon>
             Ce fichier expirera dans {{ daysRemaining }} jours.
           </div>
         }
@@ -70,7 +70,7 @@
           [disabled]="hasPassword && !password"
           (click)="onDownload()"
         >
-          <i class="fa-solid fa-cloud-arrow-down"></i>
+          <lucide-icon name="cloud-download" [size]="16"></lucide-icon>
           Télécharger
         </button>
       }

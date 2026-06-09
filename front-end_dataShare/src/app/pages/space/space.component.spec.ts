@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
-import { LUCIDE_ICONS, LucideIconProvider, File, FileImage, FileMusic, FilePlay } from 'lucide-angular';
+import { LUCIDE_ICONS, LucideIconProvider, File, FileImage, FileMusic, FilePlay, X, Menu, LogOut, Trash, ArrowRight, EllipsisVertical, Lock } from 'lucide-angular';
 
 import { SpaceComponent } from './space.component';
 import { FileService } from '../../core/services/file.service';
@@ -29,7 +29,7 @@ describe('SpaceComponent', () => {
       imports: [SpaceComponent],
       providers: [
         provideRouter([]),
-        { provide: LUCIDE_ICONS, useValue: new LucideIconProvider({ File, FileImage, FileMusic, FilePlay }), multi: true },
+        { provide: LUCIDE_ICONS, useValue: new LucideIconProvider({ File, FileImage, FileMusic, FilePlay, X, Menu, LogOut, Trash, ArrowRight, EllipsisVertical, Lock }), multi: true },
         { provide: FileService,   useValue: fileServiceMock },
         { provide: AuthService,   useValue: { removeToken: jest.fn() } },
         { provide: ToastrService, useValue: { info: jest.fn() } },
