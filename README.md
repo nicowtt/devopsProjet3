@@ -14,7 +14,26 @@ Datashare est un site internet permettant à un utilisateur d'uploader un fichie
 
 ---
 
-### Fonctionnalités
+## Sommaire
+
+- [1. Fonctions](#1-fonctions)
+- [2. Stack technique](#2-stack-technique)
+- [3. Versions](#3-versions)
+- [4.Variables d'environnement](#4-variables-denvironnement)
+
+- [5. Prérequis](#5-prerequis)
+- [6.Lancement de l'application](#6-lancement-application)
+  - [6.1. Back-end](#61-back-end)
+  - [6.2. Front-end](#62-front-end)
+- [7.Tests](#7-tests)
+  - [7.1Back-end](#71-back-end)
+  - [7.2 Front-end - Tests unitaires](#72-front-end--tests-unitaires)
+  - [7.3 Front-end - Tests e2e](#73-front-end-tests-e2e)
+- [8.Structure du projet](#8-structure-du-projet)
+
+---
+
+### 1. Fonctions
 
 - **Téléversement** (avec ou sans compte) de fichiers jusqu'à 1 Go, types autorisés (images, vidéos, audio, PDF, ZIP…) protégé par mot de passe (optionnel - 6 caractères minimum)
 
@@ -30,26 +49,7 @@ Datashare est un site internet permettant à un utilisateur d'uploader un fichie
 
 ---
 
-## Sommaire
-
-- [Fonctionnalités](#fonctionnalités)
-- [Stack technique](#stack-technique)
-- [Versions](#versions)
-- [Variables d'environnement](#variables-denvironnement)
-  - [Back-end](#back-end)
-- [Prérequis](#prérequis)
-- [Lancement de l'application](#lancement-de-lapplication)
-  - [1. Back-end](#1-back-end)
-  - [2. Front-end](#2-front-end)
-- [Tests](#tests)
-  - [Back-end (JUnit 5 + Testcontainers)](#back-end-junit-5--testcontainers)
-  - [Front-end — Tests unitaires (Jest)](#front-end--tests-unitaires-jest)
-  - [Front-end — Tests e2e (Cypress)](#front-end--tests-e2e-cypress)
-- [Structure du projet](#structure-du-projet)
-
----
-
-## Stack technique
+## 2. Stack technique
 
 | Couche          | Technologies                                                                  |
 | --------------- | ----------------------------------------------------------------------------- |
@@ -61,15 +61,15 @@ Datashare est un site internet permettant à un utilisateur d'uploader un fichie
 
 ---
 
-## Versions
+## 3. Versions
 
 - Pour le détail des versions des dépendances, voir [MAINTENANCE.md]
 
 ---
 
-## Variables d'environnement
+## 4. Variables d'environnement
 
-### Back-end
+(Back-end)
 
 Créer un fichier `.env` à la racine de `back-end_dataShare/` (ou définir les variables dans votre environnement) :
 
@@ -84,7 +84,7 @@ JWT_SECRET=<long_secret>
 
 ---
 
-## Prérequis
+## 5. Prerequis
 
 Cloner le repository :
 
@@ -93,9 +93,9 @@ git clone https://github.com/nicowtt/devopsProjet3.git
 cd devopsProjet3
 ```
 
-## Lancement de l'application
+## 6. Lancement application
 
-### 1. Back-end
+### 6.1. Back-end
 
 Spring Boot démarre automatiquement la base de données PostgreSQL via Docker Compose.
 
@@ -123,7 +123,7 @@ Dès que le Back-end est lancé la documentation est disponible aux urls :
 
 - Swagger API : `http://localhost:9000/swagger-ui/index.html`
 
-### 2. Front-end
+### 6.2. Front-end
 
 ```bash
 cd front-end_dataShare
@@ -135,9 +135,11 @@ L'application est disponible sur : `http://localhost:4200`
 
 ---
 
-## Tests
+## 7. Tests
 
-### Back-end (JUnit 5 + Testcontainers)
+### 7.1 Back-end
+
+Outil : JUnit 5 + Testcontainers
 
 ```bash
 cd back-end_dataShare
@@ -146,14 +148,18 @@ mvn clean test
 
 Rapport de couverture JaCoCo : `target/site/jacoco/index.html`
 
-### Front-end — Tests unitaires (Jest)
+### 7.2 Front-end - Tests unitaires
+
+Outil : Jest
 
 ```bash
 cd front-end_dataShare
 npm test
 ```
 
-### Front-end — Tests e2e (Cypress)
+### 7.3 Front-end - Tests e2e
+
+Outil : Cypress
 
 **Mode avec interface graphique :**
 
@@ -178,7 +184,7 @@ npx nyc report --reporter=text-summary
 
 ---
 
-## Structure du projet
+## 8. Structure du projet
 
 ```
 projet-3/

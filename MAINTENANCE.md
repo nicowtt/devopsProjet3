@@ -17,12 +17,12 @@ Ce document décrit les procédures de maintenance de l'application DataShare :
 - [1. Versions actuelles](#1-versions-actuelles)
   - [Back-end](#back-end)
   - [Front-end](#front-end)
-- [2. Fréquence des mises à jour recommandée](#2-fréquence-des-mises-à-jour-recommandée)
-- [3. Procédures de mise à jour](#3-procédures-de-mise-à-jour)
+- [2. Fréquence des mises à jour recommandée](#2-frequence-des-mises-a-jour-recommandee)
+- [3. Procédures de mise à jour](#3-procedures-de-mise-a-jour)
   - [3.1 Back-end (Maven)](#31-back-end-maven)
-  - [3.2 Front-end (npm / Angular)](#32-front-end-npm--angular)
-  - [3.3 Base de données PostgreSQL](#33-base-de-données-postgresql)
-  - [3.4 Schéma de base de données (Liquibase)](#34-schéma-de-base-de-données-liquibase)
+  - [3.2 Front-end (npm - Angular)](#32-front-end-npm-angular)
+  - [3.3 Base de données PostgreSQL](#33-base-de-donnees-postgresql)
+  - [3.4 Schéma de base de données (Liquibase)](#34-schema-de-base-de-donnees-liquibase)
 - [4. Risques par composant](#4-risques-par-composant)
   - [Spring Boot](#spring-boot)
   - [JWT](#jwt-jjwt-013x)
@@ -34,8 +34,8 @@ Ce document décrit les procédures de maintenance de l'application DataShare :
   - [Fichiers uploadés](#fichiers-uploadés)
 - [6. Rollback](#6-rollback)
   - [Rollback applicatif](#rollback-applicatif)
-  - [Rollback de schéma (Liquibase)](#rollback-de-schéma-liquibase)
-- [7. Checklist de mise à jour](#7-checklist-de-mise-à-jour)
+  - [Rollback de schéma bdd (Liquibase)](#rollback-de-schema-bdd-liquibase)
+- [7. Checklist de mise à jour](#7-checklist-de-mise-a-jour)
 
 ---
 
@@ -76,7 +76,7 @@ Toutes les versions sont centralisées dans le fichier maven `pom.xml`.
 
 ---
 
-## 2. Fréquence des mises à jour recommandée
+## 2. Frequence des mises a jour recommandee
 
 | Type                         | Fréquence                  | Déclencheur                                                                  |
 | ---------------------------- | -------------------------- | ---------------------------------------------------------------------------- |
@@ -89,7 +89,7 @@ Toutes les versions sont centralisées dans le fichier maven `pom.xml`.
 
 ---
 
-## 3. Procédures de mise à jour
+## 3. Procedures de mise a jour
 
 ### 3.1 Back-end (Maven)
 
@@ -168,7 +168,7 @@ npx cypress verify
 
 ---
 
-### 3.3 Base de données PostgreSQL
+### 3.3 Base de donnees PostgreSQL
 
 L'image Docker est définie dans `back-end_dataShare/compose.yaml` :
 
@@ -193,7 +193,7 @@ image: 'postgres:18'
 
 ---
 
-### 3.4 Schéma de base de données (Liquibase)
+### 3.4 Schema de base de donnees (Liquibase)
 
 Les migrations sont versionées au fur et à mesure du développement dans `src/main/resources/db/changelog/`.
 
@@ -283,7 +283,7 @@ En cas de régression après une mise à jour :
 
 3. Redéployer.
 
-### Rollback de schéma bdd (Liquibase)
+### Rollback de schema bdd (Liquibase)
 
 Liquibase supporte le rollback si les changesets définissent un `rollback` :
 
@@ -295,7 +295,7 @@ Si aucun rollback n'est défini dans le changeset, restaurer le dump SQL de la b
 
 ---
 
-## 7. Checklist de mise à jour
+## 7. Checklist de mise a jour
 
 Avant de déployer une mise à jour :
 

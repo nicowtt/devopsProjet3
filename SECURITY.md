@@ -23,10 +23,10 @@ Ce document présente les solutions techniques de sécurité mises en place dans
   - [2.2 Validation back-end](#22-validation-back-end)
 - [3/ Authentification JWT](#3-authentification-jwt)
   - [3.1 Fonctionnement](#31-fonctionnement)
-  - [3.2 Génération du token](#32-génération-du-token)
+  - [3.2 Génération du token](#32-generation-du-token)
   - [3.3 Validation du token](#33-validation-du-token)
   - [3.4 Configuration des routes](#34-configuration-des-routes)
-- [4/ Données sensibles](#4-données-sensibles)
+- [4/ Données sensibles](#4-donnees-sensibles)
 
 ---
 
@@ -95,7 +95,7 @@ Le projet utilise une authentification **sans état (stateless)** basée sur des
 2. Le token est envoyé dans le header `Authorization: Bearer <token>` à chaque requête qui à besoin d'être authentifiées.
 3. Un filtre Spring (`JwtAuthenticationFilter`) intercepte chaque requête et valide le token.
 
-### 3.2 Génération du token
+### 3.2 Generation du token
 
 Service JwtService.java
 
@@ -134,7 +134,7 @@ SpringSecurityConfig.java
 
 ---
 
-## 4 Données sensibles
+## 4 Donnees sensibles
 
 Les credentials (BDD, clé JWT) sont externalisés dans un fichier `.env` non commité, chargé au démarrage via `PropertySourcesPlaceholderConfigurer`.
 

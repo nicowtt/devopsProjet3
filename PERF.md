@@ -11,25 +11,25 @@ Ce document présente les mesures de performance réalisées sur le projet DataS
 
 1. [Performance API](#1-performance-api)
    
-   - 1.1 [Pourquoi cet endpoint ?](#11-pourquoi-cet-endpoint-)
+   1.1 [Pourquoi cet endpoint ?](#11-pourquoi-cet-endpoint-)
    
-   - 1.2 [Méthode et charge basique](#12-méthode-et-charge-basique)
+   1.2 [Méthode et charge basique](#12-méthode-et-charge-basique)
    
-   - 1.3 [Analyse performance](#13-analyse-performance)
+   1.3 [Analyse performance](#13-analyse-performance)
    
-   - 1.4 [Forte charge](#14-forte-charge)
+   1.4 [Forte charge](#14-forte-charge)
 
-2. - 2.2 [Installation des outils](#22-installation-des-outils)
+2. [Analyse du bundle Angular front-end](#2-analyse-du-bundle-angular-front-end)
+   - 2.1 [Réglage par default du budgets](#21-reglage-par-default-du-budgets)
+   - 2.2 [Installation des outils](#22-installation-des-outils)
    
-   - 2.3 [Analyse](#23-analyse)
+   - 2.3 [Exemple d'analyse](#23-exemple-analyse)
    
-   - 2.4 [Amélioration effectuée](#24-amélioration-effectué)
+   - 2.4 [Amélioration](#24-amelioration)
    
    - 2.5 [Warnings restants](#25-warnings-restants)
    
    - 2.6 [Conclusion et correctif](#26-conclusion-et-correctif)
-
-3. - 2.1 [Réglage par défaut du budget](#21-réglage-par-default-du-budgets)
 
 ---
 
@@ -173,7 +173,7 @@ Angular compile tout ton code en quelques fichiers (les "chunks"). Il y a deux f
 1. **Le log du build** → tailles par fichier
 2. **source-map-explorer** → répartition visuelle par bibliothèque
 
-### 2.1 Réglage par default du budgets
+### 2.1 Reglage par default du budgets
 
 Il est définie dans `angular.json`
 
@@ -229,7 +229,7 @@ json
 }
 ```
 
-## 2.3 Analyse
+## 2.3 Exemple analyse
 
 ```bash
 npm run build
@@ -258,7 +258,7 @@ src -> 11 % -> Code métier (léger -> pas de code inutile)
 Idéalement le code métier ne doit pas dépasser 20-30%, ok dans ce projet.
 Les 71 % restant c'est le framework et les dépendances -> C'est le coût d'angular.
 
-## 2.4 Amélioration effectué
+## 2.4 amelioration
 
 Avant cette session, `@fortawesome/fontawesome-free` était inclus inutilement.
 J'avait deux librairie d'icones, `fontawesome` et `lucide-angular`.
@@ -283,7 +283,7 @@ Le projet est dans un état sain côté performances :
 - L'endpoint `GET /api/files/{uuid}` répond en **~8 ms** unitaire et tient **1 324 req/s** à 20 connexions simultanées sans aucun échec.
 - Aprés amélioration le bundle front est à **440 kB** brut (< 500) , dans les limites du budget Angular.
 
-<u>Pour éviter la regression de performance, j'ai resseré les seuils :</u>
+<u>Pour éviter la regression de performance, modification des seuils :</u>
 
 - Pour le bundle initial **600 kB en warning et 700 kB en erreur**. 
   -> Si quelqu'un ajoute une grosse librarie, en sera en warning. -> Détection non bloquante.
