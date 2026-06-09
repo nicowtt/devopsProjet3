@@ -1,5 +1,12 @@
 # Performances — DataShare
 
+Ce document présente les mesures de performance réalisées sur le projet DataShare : 
+
+* Performance et charge API back-end 
+- Analyse du bundle Angular front-end.
+
+---
+
 ## Sommaire
 
 1. [Performance API](#1-performance-api)
@@ -10,21 +17,21 @@
    
    - 1.3 [Analyse performance](#13-analyse-performance)
    
-   - 1.4 [Forte charge](#14-forte-charge-)
+   - 1.4 [Forte charge](#14-forte-charge)
 
-2. [Analyse du bundle Angular front-end](#2-analyse-du-bundle-angular-front-end)
-   
-   - 2.1 [Réglage par défaut du budget](#21-réglage-par-default-du-budgets)
-   
-   - 2.2 [Installation des outils](#22-installation-des-outils)
+2. - 2.2 [Installation des outils](#22-installation-des-outils)
    
    - 2.3 [Analyse](#23-analyse)
    
-   - 2.4 [Amélioration effectuée](#24-amélioration-effectué-)
+   - 2.4 [Amélioration effectuée](#24-amélioration-effectué)
    
    - 2.5 [Warnings restants](#25-warnings-restants)
    
    - 2.6 [Conclusion et correctif](#26-conclusion-et-correctif)
+
+3. - 2.1 [Réglage par défaut du budget](#21-réglage-par-default-du-budgets)
+
+---
 
 ## 1. Performance API
 
@@ -100,9 +107,7 @@ Le temps de connexion est quasi nul (0–1 ms) : on bénéficie du keep-alive HT
 
 En production, il faudra ajouter la latence réseau (typiquement +20–50 ms selon la région), mais l'endpoint lui-même ne présente pas de goulet d'étranglement — c'est un simple `SELECT` par UUID indexé suivi d'une projection DTO, pas de calcul coûteux.
 
-
-
-## 1.4 Forte charge :
+## 1.4 Forte charge
 
 **Charge — 1000 requêtes, 500 connexions simultanées (`ab -n 500 -c 20`) :**
 
@@ -185,7 +190,6 @@ C'est tout ce qu'Angular envoie au navigateur avant même que l'utilisateur inte
 
 - **500 kB** → warning dans le terminal, le build passe quand même
 - **1 MB** → erreur, le build échoue
-  
 
 **`type: "anyComponentStyle"`** : Ce sont les styles propres à chaque composant.
 
@@ -225,9 +229,6 @@ json
 }
 ```
 
-
-
-
 ## 2.3 Analyse
 
 ```bash
@@ -257,7 +258,7 @@ src -> 11 % -> Code métier (léger -> pas de code inutile)
 Idéalement le code métier ne doit pas dépasser 20-30%, ok dans ce projet.
 Les 71 % restant c'est le framework et les dépendances -> C'est le coût d'angular.
 
-## 2.4 Amélioration effectué :
+## 2.4 Amélioration effectué
 
 Avant cette session, `@fortawesome/fontawesome-free` était inclus inutilement.
 J'avait deux librairie d'icones, `fontawesome` et `lucide-angular`.
@@ -281,9 +282,6 @@ Le projet est dans un état sain côté performances :
 
 - L'endpoint `GET /api/files/{uuid}` répond en **~8 ms** unitaire et tient **1 324 req/s** à 20 connexions simultanées sans aucun échec.
 - Aprés amélioration le bundle front est à **440 kB** brut (< 500) , dans les limites du budget Angular.
-
-
-
 
 <u>Pour éviter la regression de performance, j'ai resseré les seuils :</u>
 

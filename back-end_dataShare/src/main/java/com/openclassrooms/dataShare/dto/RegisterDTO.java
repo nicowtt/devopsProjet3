@@ -12,10 +12,6 @@ public class RegisterDTO {
     @Email
     private String email;
 
-    public void setEmail(String email) {
-        this.email = email != null ? email.toLowerCase() : null;
-    }
-
     @NotBlank
     @Size(min = 8)
     private String password;

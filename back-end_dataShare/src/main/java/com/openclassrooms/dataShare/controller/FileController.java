@@ -72,7 +72,7 @@ public class FileController {
     }
 
     @Operation(
-        summary = "Affichage d'un fichier",
+        summary = "Affichage des métadonnées d'un fichier",
         responses = {
             @ApiResponse(responseCode = "200", description = "Ok"),
             @ApiResponse(responseCode = "404", description = "Introuvable")
@@ -84,17 +84,17 @@ public class FileController {
     }
 
     @Operation(
-        summary = "Téléchargement d'un fichier",
+        summary = "Authorization du téléchargement d'un fichier (mot de passe optionnel)",
         responses = {
             @ApiResponse(responseCode = "200", description = "Ok"),
             @ApiResponse(responseCode = "403", description = "Mot de passe nécessaire ou mauvais mot de passe"),
             @ApiResponse(responseCode = "404", description = "Introuvable")
         }
     )
-    @GetMapping("/download/{uuid}")
+    @PostMapping("/download/{uuid}")
     public FileResponseDTO downloadFile(
         @PathVariable UUID uuid,
-        @RequestParam(value = "password", required = false) String password
+        @RequestBody(required = false) String password
     ) {
         return fileService.downloadFile(uuid, password);
     }

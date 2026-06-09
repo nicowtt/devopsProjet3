@@ -52,7 +52,7 @@ describe('Upload and download file', () => {
     };
 
     cy.intercept('GET', `/api/files/${fileUuid}`, mockFile).as('getFile');
-    cy.intercept('GET', `/api/files/download/${fileUuid}`, { statusCode: 200, body: 'file content' }).as('download');
+    cy.intercept('POST', `/api/files/download/${fileUuid}`, { statusCode: 200, body: 'file content' }).as('download');
     cy.window().then(win => win.localStorage.setItem('jwt_token', TOKEN));
 
     cy.visit(`/download/${fileUuid}`);

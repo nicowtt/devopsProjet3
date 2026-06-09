@@ -6,23 +6,25 @@ Il couvre :
 
 * Les **tests unitaires** du Back-end (JUnit 5 / Mockito) et du Front-end (Jest). 
 
-*  Les **tests d'intégration** du Back-end avec une base de données PostgreSQL isolée (Testcontainers). 
+* Les **tests d'intégration** du Back-end avec une base de données PostgreSQL isolée (Testcontainers). 
 
-*  Les **tests end-to-end** (Cypress) simulant les parcours utilisateur complets. 
+* Les **tests end-to-end** (Cypress) simulant les parcours utilisateur complets. 
 
 Pour chaque test, le document précise l'action testée, le cas couvert et le comportement attendu. 
 
 Les procédures de lancement sont détaillées en fin de document.
 
+---
+
 ## Sommaire
 
-- [1. Tests unitaires — Back-end](#1-tests-unitaires--back-end)
+- [1. Tests unitaires - Back-end](#1-tests-unitaires-back-end)
   - [1.1 UserService](#11-userservice-4-tests)
   - [1.2 FileService](#12-fileservice-4-tests)
-- [2. Tests d'intégration — Back-end](#2-tests-dintégration--back-end)
+- [2. Tests integration - Back-end](#2-tests-integration-back-end)
   - [2.1 UserController](#21-usercontroller-5-tests)
   - [2.2 FileController](#22-filecontroller-9-tests)
-- [3. Tests unitaires — Front-end](#3tests-unitaires---front-end-angular)
+- [3. Tests unitaires - Front-end](#3-tests-unitaires-front-end-angular)
   - [3.1 Guard](#31-guard-2-tests)
   - [3.2 Interceptor](#32-interceptor-1-test)
   - [3.3 UserService](#33-userservice-4-tests)
@@ -33,16 +35,19 @@ Les procédures de lancement sont détaillées en fin de document.
   - [3.8 Login composant](#38-login-composant-2-tests)
   - [3.9 Register composant](#39-register-composant-2-tests)
   - [3.10 Space composant](#310-space-composant-3-tests)
-- [4. Tests end-to-end — Front-end](#4-tests-end-to-end-e2e--front-end-angular---2-scénarios)
+- [4. Tests fonctionnels end-to-end - Front-end](#4-tests-fonctionnels-end-to-end-front-end-)
   - [4.1 Enregistrement et authentification](#41-enregistrement-et-authentification-dun-utilisateur)
   - [4.2 Cycle de vie d'un fichier](#42-cycle-de-vie-dun-fichier)
-- [5. Lancement des tests Back-end](#5-lancement-des-tests-back-end-)
-- [6. Lancement des tests unitaires Front-end](#6-lancement-des-tests-unitaires-front-end-)
-- [7. Lancement des tests fonctionnels e2e](#7-lancement-des-tests-fonctionnels-e2e-front-end-)
+- [5. Lancement des tests Back-end](#5-lancement-des-tests-back-end)
+- [6. Lancement des tests unitaires Front-end](#6-lancement-des-tests-unitaires-front-end)
+- [7. Lancement des tests fonctionnels e2e](#7-lancement-des-tests-fonctionnels-e2e-front-end)
   - [7.1 Avec interface graphique](#71-avec-interface-graphique)
-  - [7.2 Couverture des tests e2e](#72-lancer-la-couverture-des-tests-fonctionnels-e2e-front-end)
+  - [7.2 Sans interface graphique](#72-sans-interface-graphique)
+  - [7.3 Couverture des tests e2e](#73-lancer-la-couverture-des-tests-fonctionnels-e2e-front-end)
 
-## 1. Tests unitaires — Back-end
+---
+
+## 1. Tests unitaires - Back-end
 
 **Framework de test :** JUnit 5 
 **Framework de mock :** Mockito 5
@@ -65,7 +70,7 @@ Les procédures de lancement sont détaillées en fin de document.
 | DOWNLOAD  | Succès du téléchargement quand le mot de passe est correct.                                                         |
 | GET FILES | Le système retourne bien une liste de fichiers.                                                                     |
 
-##### 2. Tests d'intégration — Back-end
+### 2. Tests integration - Back-end
 
 Les tests d'intégration utilisent Testcontainers, qui lance automatiquement une image Docker PostgreSQL le temps de l'exécution des tests, garantissant un environnement isolé et proche de la production.
 
@@ -93,7 +98,7 @@ Les tests d'intégration utilisent Testcontainers, qui lance automatiquement une
 | DELETE /api/files/{uuid}       | DELETE   | Un utilisateur essaye d'effacer un fichier qui ne lui appartient pas → 403 (FORBIDDEN) |
 | DELETE /api/files/{uuid}       | DELETE   | Uuid du fichier inconnu → 404 (NOT_FOUND)                                              |
 
-### 3.Tests unitaires - Front-end (ANGULAR)
+### 3. Tests unitaires - Front-end ANGULAR
 
 **Framework de test unitaire JavaScript:** Jest
 
@@ -176,9 +181,9 @@ Les tests d'intégration utilisent Testcontainers, qui lance automatiquement une
 | FILES    | Affiche les fichiers.         |
 | FILTER   | Filtre tous / actif / expiré. |
 
-## 4. Tests end-to-end (e2e) — Front-end (Angular) - (2 scénarios)
+## 4. Tests fonctionnels end-to-end - Front-end
 
-**Outil de test end-to-end (e2e) :** Cypress
+**Outil de test :** Cypress
 
 ### 4.1 Enregistrement et authentification d'un utilisateur
 
@@ -201,7 +206,7 @@ upload_see_ddl_and_delete_file_with_authenticated_user.cy.ts
 3. Téléchargement du fichier.
 4. Effacement du fichier.
 
-### 5. Lancement des tests Back-end :
+### 5. Lancement des tests Back-end
 
 Ouvrir un terminal dans le dossier du Back-end :
 
@@ -211,7 +216,7 @@ Ouvrir un terminal dans le dossier du Back-end :
 
 *.../target/site/jacoco/index.html*
 
-### 6. Lancement des tests unitaires Front-end :
+### 6. Lancement des tests unitaires Front-end
 
 Ouvrir un terminal dans le dossier du Front-end :
 
@@ -219,15 +224,21 @@ Ouvrir un terminal dans le dossier du Front-end :
 
 La couverture des tests s'affiche.
 
-### 7. Lancement des tests fonctionnels (e2e) Front-end :
+### 7. Lancement des tests fonctionnels e2e Front-end
 
-## 7.1 Avec interface graphique:
+## 7.1 Avec interface graphique
 
 Ouvrir un terminal dans le dossier du Front-end :
 
 `npx cypress open`
 
-## 7.2 Lancer la couverture des tests fonctionnels (e2e) Front-end
+### 7.2 Sans interface graphique
+
+Ouvrir un terminal dans le dossier du Front-end :
+
+`npx cypress run`
+
+## 7.3 Lancer la couverture des tests fonctionnels e2e Front-end
 
 Ouvrir un terminal dans le dossier du Front-end :
 

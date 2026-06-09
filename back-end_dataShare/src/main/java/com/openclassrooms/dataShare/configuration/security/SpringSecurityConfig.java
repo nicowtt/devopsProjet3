@@ -55,7 +55,7 @@ public class SpringSecurityConfig {
                         .requestMatchers("/api/users/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/files").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/files/*").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/files/download/*").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/files/download/*").permitAll()
                         .requestMatchers("/swagger-ui/**", "/api-docs/**").permitAll()
                         // Others protected routes will be added here.
                         .anyRequest().authenticated()

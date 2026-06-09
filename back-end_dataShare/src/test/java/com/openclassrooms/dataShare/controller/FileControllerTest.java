@@ -27,6 +27,7 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
+import org.springframework.http.MediaType;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -190,8 +191,9 @@ class FileControllerTest extends AbstractIntegrationTest {
         String uuid = objectMapper.readTree(uploadResponse).get("uuid").asText();
 
         // THEN
-        mockMvc.perform(get(URL + "/download/" + uuid)
-                .param("password", "wrongPassword"))
+        mockMvc.perform(post(URL + "/download/" + uuid)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("\"wrongPassword\""))
             .andDo(print())
             .andExpect(status().isForbidden());
     }

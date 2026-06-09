@@ -25,6 +25,7 @@ public class UserService {
 
     public void register(User user) {
         log.info("Registering new user");
+        user.setEmail(user.getEmail().toLowerCase());
 
         Optional<User> optionalUser = userRepository.findByEmail(user.getEmail());
         if (optionalUser.isPresent()) {
@@ -35,7 +36,7 @@ public class UserService {
     }
 
     public String login(User user) {
-        Optional<User> userDb = userRepository.findByEmail(user.getEmail());
+        Optional<User> userDb = userRepository.findByEmail(user.getEmail().toLowerCase());
         if (userDb.isPresent() && passwordEncoder.matches(user.getPassword(), userDb.get().getPassword())) {
             return jwtService.generateToken(userDb.get());
         } else {

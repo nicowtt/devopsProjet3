@@ -21,11 +21,9 @@ export class FileService {
   }
 
   downloadFile(uuid: string, password?: string): Observable<Blob> {
-    const params: Record<string, string> = password ? { password } : {};
-    return this.httpClient.get(`/api/files/download/${uuid}`, {
-      params,
+    return this.httpClient.post(`/api/files/download/${uuid}`, password ?? null, {
       responseType: 'blob' as const
-    }) as Observable<Blob>;
+    });
   }
 
   getFiles(): Observable<FileResponseDTO[]> {
