@@ -30,6 +30,7 @@ Datashare est un site internet permettant à un utilisateur d'uploader un fichie
   - [7.2 Front-end - Tests unitaires](#72-front-end--tests-unitaires)
   - [7.3 Front-end - Tests e2e](#73-front-end-tests-e2e)
 - [8.Structure du projet](#8-structure-du-projet)
+- [9.Déploiement](#9-deploiement)
 
 ---
 
@@ -201,3 +202,27 @@ projet-3/
     TESTING.md              # Plan de test détaillé
     README.md               # Processus d'installation et d'exécution
 ```
+
+### 9. Deploiement
+
+**A/** Acheter un nom de domaine + serveur.
+
+    -> pointer le nom de domaine vers l’ip du serveur.
+
+**B/** Installer les outils (Nginx / JAVA  / NodeJS /PostgreSQL) sur le serveur.
+
+**C/** Cloner le repository (https://github.com/nicowtt/devopsProjet3)
+
+**D/** Crée le fichier .env
+
+**E/** Lancer la base donnée PostgreSQL (docker compose up -d)
+
+**F/** Builder et deployer le Back-end
+
+**G/** Builder et déployer le Front-end.
+
+    -> ng build --configuration production
+
+**H/** Configurer le Nginx pour la déclaration des applications.
+
+**I/** Activer le https (ssl) avec Certbot.

@@ -59,7 +59,10 @@ export class RegisterComponent {
       password: this.password.value
     };
     this.userService.register(registerDTO).subscribe({
-      next: () => this.router.navigate(['/login']),
+      next: () => {
+        this.toastr.success('Votre compte a bien été créé');
+        this.router.navigate(['/login']);
+      },
       error: (err) => {
         this.toastr.error(err.error?.message || 'Une erreur est survenue. Veuillez réessayer.');
       }

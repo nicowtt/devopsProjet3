@@ -2,6 +2,7 @@ package com.openclassrooms.dataShare.controller;
 
 import com.openclassrooms.dataShare.dto.FileRequestDTO;
 import com.openclassrooms.dataShare.dto.FileResponseDTO;
+import com.openclassrooms.dataShare.entities.File;
 import com.openclassrooms.dataShare.entities.User;
 import com.openclassrooms.dataShare.mapper.FileDTOMapper;
 import com.openclassrooms.dataShare.service.FileService;
@@ -11,6 +12,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -92,11 +95,16 @@ public class FileController {
         }
     )
     @PostMapping("/download/{uuid}")
-    public FileResponseDTO downloadFile(
+    public ResponseEntity<Resource> downloadFile(
         @PathVariable UUID uuid,
         @RequestBody(required = false) String password
     ) {
-        return fileService.downloadFile(uuid, password);
+        File file = fileService.downloadFile(uuid, password);
+        Resource resource = fileService.readFileAsResource(uuid);
+        return ResponseEntity.ok()
+            .contentType(MediaType.parseMediaType(file.getMimeType()))
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getName() + "\"")
+            .body(resource);
     }
 
     // ---------------------------- DELETE ---------------

@@ -103,17 +103,15 @@ class FileServiceTest {
         File file = new File();
         file.setUuid(uuid);
         file.setPassword("password");
-        FileResponseDTO dto = new FileResponseDTO();
 
         when(fileRepository.findByUuid(uuid)).thenReturn(Optional.of(file));
         when(passwordEncoder.matches("password", "password")).thenReturn(true);
-        when(fileDTOMapper.toFileResponseDTO(file)).thenReturn(dto);
 
         // WHEN
-        FileResponseDTO result = fileService.downloadFile(uuid, "password");
+        File result = fileService.downloadFile(uuid, "password");
 
         // THEN
-        assertThat(result).isEqualTo(dto);
+        assertThat(result).isEqualTo(file);
     }
 
     // GET FILES

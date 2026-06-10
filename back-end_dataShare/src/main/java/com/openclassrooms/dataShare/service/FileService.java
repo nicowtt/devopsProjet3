@@ -20,6 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import org.apache.tika.Tika;
 
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -101,13 +104,9 @@ public class FileService {
         return fileDTOMapper.toFileResponseDTO(fileDb);
     }
 
-    public FileResponseDTO downloadFile(
-        UUID fileUuid,
-        String password
-    ) {
+    public File downloadFile(UUID fileUuid, String password) {
         File fileDb = fileRepository.findByUuid(fileUuid)
             .orElseThrow(() -> new ResourceNotFoundException("Introuvable"));
-        // check password
         if (fileDb.getPassword() != null) {
             if (password == null) {
                 throw new AccessDeniedException("Ce fichier nécessite un mot de passe");
@@ -116,7 +115,16 @@ public class FileService {
                 throw new AccessDeniedException("Mot de passe incorrect");
             }
         }
-        return fileDTOMapper.toFileResponseDTO(fileDb);
+        return fileDb;
+    }
+
+    public Resource readFileAsResource(UUID fileUuid) {
+        Path filePath = Paths.get(uploadDir).resolve(fileUuid.toString());
+        Resource resource = new FileSystemResource(filePath);
+        if (!resource.exists()) {
+            throw new ResourceNotFoundException("Fichier introuvable sur le disque");
+        }
+        return resource;
     }
 
     public void deleteFile(UUID fileUuid, User user) {
