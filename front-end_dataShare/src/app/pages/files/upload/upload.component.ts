@@ -23,6 +23,7 @@ export class UploadComponent {
 
   selectedFile: File | null = null;
   isDragging = false;
+  isUploading = false;
   password = '';
   showPassword = false;
   expiration = 7;
@@ -119,15 +120,18 @@ export class UploadComponent {
     }
     this.passwordError = '';
     this.errorMessage = '';
+    this.isUploading = true;
     const fileRequestDTO: FileRequestDTO = {
       dayBeforeExpiration: this.expiration,
       ...(this.password ? { password: this.password } : {})
     };
     this.fileService.upload(this.selectedFile, fileRequestDTO).subscribe({
       next: (fileResponseDTO: FileResponseDTO) => {
+        this.isUploading = false;
         this.shareUrl = `${environment.baseUrl}/download/${fileResponseDTO.uuid}`;
       },
       error: (err) => {
+        this.isUploading = false;
         this.errorMessage = err.error?.message ?? 'Une erreur est survenue lors du téléversement.';
         this.toastr.error(this.errorMessage);
       }

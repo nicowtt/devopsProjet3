@@ -76,9 +76,9 @@
           }
 
           <div class="actions">
-            <button class="btn-upload" data-cy="upload-btn" type="submit" [disabled]="!selectedFile">
-              <lucide-icon name="cloud-upload" [size]="16"></lucide-icon>
-              Téléverser
+            <button class="btn-upload" data-cy="upload-btn" type="submit" [disabled]="!selectedFile || isUploading">
+              <lucide-icon [name]="isUploading ? 'loader-circle' : 'cloud-upload'" [size]="16" [class.spinning]="isUploading"></lucide-icon>
+              {{ isUploading ? 'Envoi en cours…' : 'Téléverser' }}
             </button>
           </div>
         </form>
